@@ -4,3 +4,4 @@ CMakeLists.txt
 /glm
 /build
 /cmake-build-debug
+/.vscode
