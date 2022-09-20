@@ -15,6 +15,8 @@ class ShaderLoader {
 public:
     unsigned int shaderProgramID;
 
+
+
     ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource);
 
     void useShaderProgram() const;

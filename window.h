@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "textureLoader.h"
+#include "Texture.h"
 
 int WIN_WIDTH = 640;
 int WIN_HEIGHT = 480;
@@ -16,5 +16,7 @@ char TITLE[] = "ProjectBahamut";
 
 
 void keyPressed(GLFWwindow *window);
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 #endif //PROJECTBAHAMUT_WINDOW_H

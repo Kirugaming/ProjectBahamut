@@ -47,7 +47,7 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if(!success) {
         glGetShaderInfoLog(vertex, 512, nullptr, infoLog);
-        std::cout << "Vertex Shader failed to compile!" << std::endl;
+        std::cout << "Vertex Shader failed to compile!\n" << infoLog << std::endl;
     }
 
     // fragment
@@ -58,7 +58,7 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
     if(!success) {
         glGetShaderInfoLog(fragment, 512, nullptr, infoLog);
-        std::cout << "Fragment shader failed to compile!" << std::endl;
+        std::cout << "Fragment shader failed to compile!\n" << infoLog << std::endl;
     }
 
     shaderProgramID = glCreateProgram();
@@ -69,7 +69,7 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     glGetShaderiv(shaderProgramID, GL_COMPILE_STATUS, &success);
     if(!success) {
         glGetShaderInfoLog(shaderProgramID, 512, nullptr, infoLog);
-        std::cout << "Shader program failed to link!" << std::endl;
+        std::cout << "Shader program failed to link!\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertex);
