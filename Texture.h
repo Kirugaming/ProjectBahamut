@@ -12,7 +12,9 @@
 
 class Texture{
 public:
-    explicit Texture(const std::string& imgSource);
+
+
+    explicit Texture(const std::string &imgSource);
 
     unsigned int aTexture{};
 

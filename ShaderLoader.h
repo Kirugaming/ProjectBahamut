@@ -9,6 +9,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 class ShaderLoader {
@@ -20,6 +22,8 @@ public:
     ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource);
 
     void useShaderProgram() const;
+
+    void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
 };
 
 

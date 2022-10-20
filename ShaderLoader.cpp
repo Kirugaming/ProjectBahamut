@@ -79,3 +79,11 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
 void ShaderLoader::useShaderProgram() const {
     glUseProgram(shaderProgramID);
 }
+
+
+// a bunch of methods that allow dev to edit the shaders uniform variables
+
+void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
+    glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
