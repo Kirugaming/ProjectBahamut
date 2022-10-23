@@ -9,13 +9,14 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "Texture.h"
+#include "GameObject.h"
 
 int WIN_WIDTH = 640;
 int WIN_HEIGHT = 480;
 char TITLE[] = "ProjectBahamut";
 
 
-void keyPressed(GLFWwindow *window);
+void keyPressed(GLFWwindow *window, GameObject &pObject);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

@@ -12,12 +12,19 @@
 class GameObject {
 public:
 
-    GameObject(const std::string &imgSource, ShaderLoader *shader);
+    GameObject(const std::string &imgSource, ShaderLoader *shader, glm::mat4 transform);
 
     SpriteRenderer sprite;
 
+    glm::mat4 transform;
+
     void draw() const;
 
+    void scale(glm::vec3 scaleBy);
+
+    void rotate(float angle);
+
+    void transformVector(glm::vec3 posChange);
 };
 
 

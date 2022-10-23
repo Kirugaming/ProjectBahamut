@@ -76,14 +76,14 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     glDeleteShader(fragment);
 }
 
-void ShaderLoader::useShaderProgram() const {
-    glUseProgram(shaderProgramID);
+ShaderLoader & ShaderLoader::useShader() const {
+    glUseProgram(this->shaderProgramID);
+    return const_cast<ShaderLoader &>(*this);
 }
-
 
 // a bunch of methods that allow dev to edit the shaders uniform variables
 
-void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
+void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) {
+    this->useShader();
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
-

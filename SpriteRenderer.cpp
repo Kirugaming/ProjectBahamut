@@ -6,7 +6,8 @@
 
 
 void SpriteRenderer::drawSprite() const {
-    shaderLoader.useShaderProgram();
+    texture.bindTexture();
+    shaderLoader.useShader();
 
     glBindVertexArray(vertexArray);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -45,4 +46,9 @@ SpriteRenderer::SpriteRenderer(const std::string &imgSource, ShaderLoader sl) : 
     // Texture coord
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+
+
+
+
 }

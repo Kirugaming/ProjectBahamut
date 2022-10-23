@@ -22,19 +22,25 @@ int main() {
         std::cout << "Glad failed to Initialize!" << std::endl;
     }
 
-    ShaderLoader shader(R"(shader\shader.vert)", R"(shader\shader.frag)");
-    ShaderLoader* shaderPtr = &shader;
 
-    GameObject box(R"(cat.png)", shaderPtr);
+    GameObject box(R"(cat.png)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),  glm::mat4(1.0f));
+    GameObject sillycat(R"(sillycat.jpg)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),glm::mat4(1.0f));
+
+
 
     while(!glfwWindowShouldClose(window)) {
-        keyPressed(window);
+        //sillycat.resetTransform();
+        //box.resetTransform();
+        keyPressed(window, box);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-
-
+        sillycat.draw();
+        //box.scale();
         box.draw();
+
+
+
 
 
         glfwSwapBuffers(window);
@@ -44,10 +50,30 @@ int main() {
     glfwTerminate();
 }
 
-void keyPressed(GLFWwindow *window) {
+void keyPressed(GLFWwindow *window, GameObject &box) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        box.scale(glm::vec3(.9f, .9, 0.0f));
+    }
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+        box.scale(glm::vec3(1.1f, 1.1f, 0.0f));
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        box.transformVector(glm::vec3(-0.1f, 0.0f, 0.0f));
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        box.transformVector(glm::vec3(0.1f, 0.0f, 0.0f));
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        box.transformVector(glm::vec3(0.0f, 0.1f, 0.0f));
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        box.transformVector(glm::vec3(0.0f, -0.1f, 0.0f));
+    }
+
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)

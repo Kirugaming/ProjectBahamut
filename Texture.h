@@ -18,6 +18,8 @@ public:
 
     unsigned int aTexture{};
 
+    void bindTexture() const;
+
 };
 
 

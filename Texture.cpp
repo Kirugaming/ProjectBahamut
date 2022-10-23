@@ -33,7 +33,11 @@ Texture::Texture(const std::string &imgSource) {
 
     stbi_image_free(img);
 
-    glBindTexture(GL_TEXTURE_2D, this->aTexture);
+
 
     std::cout << "Image Loaded" << std::endl;
+}
+
+void Texture::bindTexture() const {
+    glBindTexture(GL_TEXTURE_2D, this->aTexture);
 };

@@ -21,9 +21,9 @@ public:
 
     ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource);
 
-    void useShaderProgram() const;
+    ShaderLoader & useShader() const;
 
-    void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
+    void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix);
 };
 
 
