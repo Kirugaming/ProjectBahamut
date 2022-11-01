@@ -3,8 +3,8 @@
 //
 #include "window.h"
 #include "ShaderLoader.h"
-#include "SpriteRenderer.h"
 #include "GameObject.h"
+#include "Game.h"
 
 int main() {
     if (!glfwInit()) {
@@ -23,21 +23,26 @@ int main() {
     }
 
 
-    GameObject box(R"(cat.png)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),  glm::mat4(1.0f));
-    GameObject sillycat(R"(sillycat.jpg)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),glm::mat4(1.0f));
 
+
+    GameObject player(R"(cat.png)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),glm::mat4(1.0f));
+    player.scale(glm::vec3(.5f, .5f, .5f));
+
+    Game game;
 
 
     while(!glfwWindowShouldClose(window)) {
-        //sillycat.resetTransform();
-        //box.resetTransform();
-        keyPressed(window, box);
+        keyPressed(window, player);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        sillycat.draw();
-        //box.scale();
-        box.draw();
+        game.camera.Position = glm::vec3(sin(0.0f), 0.0f, cos(glfwGetTime() * 1.0f));
+
+        //std::cout << game.camera.Position.x << std::endl;
+
+
+        game.drawScene();
+
 
 
 

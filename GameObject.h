@@ -17,14 +17,17 @@ public:
     SpriteRenderer sprite;
 
     glm::mat4 transform;
-
-    void draw() const;
+    glm::mat4 view = glm::mat4(1.0f);
 
     void scale(glm::vec3 scaleBy);
 
     void rotate(float angle);
 
     void transformVector(glm::vec3 posChange);
+
+    glm::mat4 projection = glm::mat4(1.0f);
+
+    void draw() const;
 };
 
 

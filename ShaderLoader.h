@@ -23,7 +23,7 @@ public:
 
     ShaderLoader & useShader() const;
 
-    void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix);
+    void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
 };
 
 

@@ -83,7 +83,7 @@ ShaderLoader & ShaderLoader::useShader() const {
 
 // a bunch of methods that allow dev to edit the shaders uniform variables
 
-void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) {
+void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
     this->useShader();
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
