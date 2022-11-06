@@ -3,29 +3,47 @@ cmake_minimum_required(VERSION 3.21)
 
 project("ProjectBahamut")
 
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
+# find dependencies
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/lib/cmake/")
 
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
 
-find_package( OpenGL REQUIRED )
-
 set(SOURCE_FILES SpriteRenderer.cpp GameObject.cpp ShaderLoader.cpp window.cpp Texture.cpp )
-set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h stb_image.h Texture.h window.h camera.h Game.cpp Game.h Scene.cpp Scene.h Player.cpp Player.h)
-
-FetchContent_Declare(
-        glfw
-        GIT_REPOSITORY https://github.com/glfw/glfw.git
-        GIT_TAG 3.3.8
-)
-FetchContent_Declare(
-        glm
-        GIT_REPOSITORY https://github.com/g-truc/glm.git
-        GIT_TAG 0.9.9.8
-)
-
-FetchContent_MakeAvailable(glfw glm)
-add_subdirectory(glad/)
+set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h Scene.cpp Scene.h Player.cpp Player.h)
 
 
-add_executable(${PROJECT_NAME} glfw ${SOURCE_FILES} ${HEADER_FILES} )
-target_link_libraries(${PROJECT_NAME} glfw glad glm)
+
+
+
+
+
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} )
+
+
+
+# glfw3
+find_package(glfw3 REQUIRED)
+target_link_libraries(${PROJECT_NAME} glfw)
+
+
+# glad
+link_libraries(GLAD lib/glad.c)
+# stb
+link_libraries(STB_IMAGE lib/stb_image.h)
+# imgui
+list(APPEND sources
+        lib/imgui/imgui.cpp
+        lib/imgui/imgui_stdlib.cpp
+        lib/imgui/imgui_draw.cpp
+        lib/imgui/imgui_tables.cpp
+        lib/imgui/imgui_widgets.cpp
+        lib/imgui/imgui_impl_glfw.cpp
+        lib/imgui/imgui_impl_opengl3.cpp
+        lib/imgui/imgui_demo.cpp
+        )
+target_sources(${PROJECT_NAME} PRIVATE ${sources})
+
+

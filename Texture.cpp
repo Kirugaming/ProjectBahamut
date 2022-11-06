@@ -4,7 +4,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Texture.h"
-#include "glad/glad.h"
+#include "lib/glad.h"
 
 
 Texture::Texture(const std::string &imgSource) {

@@ -22,6 +22,14 @@ int main() {
         std::cout << "Glad failed to Initialize!" << std::endl;
     }
 
+    // dear imgui interface stuff
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    std::cout << reinterpret_cast<const char *>(glGetString(GL_VERSION)) << std::endl;
+    ImGui_ImplOpenGL3_Init();
+    ImGui::StyleColorsDark();
 
 
 
@@ -30,53 +38,84 @@ int main() {
 
     Game game;
 
+    float deltaTime;
+    float currentFrame = 0.0;
+    float lastFrame;
 
+    glEnable(GL_DEPTH_TEST);
+
+
+    ImVec4 skyboxColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
     while(!glfwWindowShouldClose(window)) {
-        keyPressed(window, player);
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        currentFrame = (float) glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
-        game.camera.Position = glm::vec3(sin(0.0f), 0.0f, cos(glfwGetTime() * 1.0f));
+        keyPressed(window, game, deltaTime);
 
-        //std::cout << game.camera.Position.x << std::endl;
+        glClearColor(skyboxColor.x * skyboxColor.w, skyboxColor.y * skyboxColor.w, skyboxColor.z * skyboxColor.w, skyboxColor.w);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        // imgui
+        // feed inputs to dear imgui, start new frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
 
         game.drawScene();
 
 
 
+        ImGui::Begin("Project Bahamut Test! Hello World!");
+        ImGui::Button("This is big if true!!");
+        ImGui::ColorEdit3("Skybox Color", reinterpret_cast<float *>(&skyboxColor));
 
+        ImGui::End();
 
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
 }
 
-void keyPressed(GLFWwindow *window, GameObject &box) {
+void keyPressed(GLFWwindow *window, Game &game, float deltaTime) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        box.scale(glm::vec3(.9f, .9, 0.0f));
-    }
-    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-        box.scale(glm::vec3(1.1f, 1.1f, 0.0f));
-    }
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        box.transformVector(glm::vec3(-0.1f, 0.0f, 0.0f));
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        game.camera.ProcessKeyboard(LEFT, deltaTime);
     }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        box.transformVector(glm::vec3(0.1f, 0.0f, 0.0f));
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        game.camera.ProcessKeyboard(FORWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        game.camera.ProcessKeyboard(BACKWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        game.camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        game.camera.setYaw(-1);
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        box.transformVector(glm::vec3(0.0f, 0.1f, 0.0f));
+        game.camera.setPitch(1);
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        box.transformVector(glm::vec3(0.0f, -0.1f, 0.0f));
+        game.camera.setPitch(-1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        game.camera.setYaw(1);
     }
 
 }

@@ -5,7 +5,7 @@
 #ifndef PROJECTBAHAMUT_SHADERLOADER_H
 #define PROJECTBAHAMUT_SHADERLOADER_H
 
-#include "glad/glad.h"
+#include "lib/glad.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>

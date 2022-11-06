@@ -5,7 +5,7 @@
 #ifndef PROJECTBAHAMUT_CAMERA_H
 #define PROJECTBAHAMUT_CAMERA_H
 
-#include <glad/glad.h>
+#include "lib/glad.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -103,6 +103,23 @@ public:
         }
 
         // update Front, Right and Up Vectors using the updated Euler angles
+        updateCameraVectors();
+    }
+
+    void setPitch(float offset) {
+        Pitch += offset;
+
+        if (Pitch > 89.0f)
+            Pitch = 89.0f;
+        if (Pitch < -89.0f)
+            Pitch = -89.0f;
+
+        updateCameraVectors();
+    }
+
+    void setYaw(float offset) {
+        Yaw += offset;
+
         updateCameraVectors();
     }
 

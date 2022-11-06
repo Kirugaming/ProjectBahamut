@@ -32,8 +32,8 @@ void GameObject::transformVector(glm::vec3 posChange) {
     this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
 }
 
-void GameObject::rotate(float angle) {
-    this->transform = glm::rotate(transform, angle, glm::vec3(1.0f, 0.0f, 1.0f));
+void GameObject::rotate(float angle, glm::vec3 vector) {
+    this->transform = glm::rotate(transform, angle, vector);
     this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
 }
 
@@ -41,3 +41,4 @@ void GameObject::scale(glm::vec3 scaleBy) {
     this->transform = glm::scale(transform, scaleBy);
     this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
 }
+

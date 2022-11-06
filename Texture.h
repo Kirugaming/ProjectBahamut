@@ -6,8 +6,8 @@
 #define PROJECTBAHAMUT_TEXTURE_H
 
 #include <iostream>
-#include "stb_image.h"
-#include "glad/glad.h"
+#include "lib/stb_image.h"
+#include "lib/glad.h"
 
 
 class Texture{

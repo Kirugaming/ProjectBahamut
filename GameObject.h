@@ -6,6 +6,7 @@
 #define PROJECTBAHAMUT_GAMEOBJECT_H
 
 
+#include <glm/gtx/matrix_decompose.hpp>
 #include "SpriteRenderer.h"
 #include "Texture.h"
 
@@ -19,9 +20,10 @@ public:
     glm::mat4 transform;
     glm::mat4 view = glm::mat4(1.0f);
 
+
     void scale(glm::vec3 scaleBy);
 
-    void rotate(float angle);
+    void rotate(float angle, glm::vec3 vector);
 
     void transformVector(glm::vec3 posChange);
 

@@ -4,13 +4,15 @@
 
 #include "Game.h"
 
-Game::Game() : camera(glm::vec3(0.0f, 0.0f, 0.0f)), player(R"(cat.png)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),glm::mat4(1.0f)) {
+Game::Game() : camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)), player(R"(cat.png)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),glm::mat4(1.0f)) {
 
 
 
     GameObject ground(R"(grass.jpg)", new ShaderLoader(R"(shader\shader.vert)", R"(shader\shader.frag)"),  glm::mat4(1.0f));
-    //ground.rotate(2.0f);
-    ground.transformVector(glm::vec3(0.0f, 0.0f, -4.0f));
+
+    ground.transformVector(glm::vec3(0.0f, -1.0f, 0.0f));
+    ground.rotate(4.7f, glm::vec3(1.0f, 0.0f, 0.0f));
+    ground.scale(glm::vec3(5.0f, 5.0f, 0.0f));
     this->sceneMap.insert(std::pair<std::string, GameObject>("ground", ground));
 }
 
