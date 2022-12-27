@@ -1,4 +1,4 @@
-# Project Bahamut
+# Project Bahamut - C++ OpenGL Game Engine
 
 Project Bahamut (name is temporary)
 is an OpenGL C++ Game Engine using: GLFW3, glad, stb_image, and Dear ImGui. 
