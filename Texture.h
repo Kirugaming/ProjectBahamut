@@ -7,18 +7,23 @@
 
 #include <iostream>
 #include "lib/stb_image.h"
-#include "lib/glad.h"
 
 
 class Texture{
 public:
 
+    Texture();
+    explicit Texture(const char *imgSource);
 
-    explicit Texture(const std::string &imgSource);
+
+    const char *imgSource;
 
     unsigned int aTexture{};
 
     void bindTexture() const;
+    void unbindTexture() const;
+
+    void changeTexture(const char *imgSource);
 
 };
 

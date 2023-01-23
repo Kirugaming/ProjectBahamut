@@ -5,8 +5,9 @@
 #ifndef PROJECTBAHAMUT_CAMERA_H
 #define PROJECTBAHAMUT_CAMERA_H
 
-#include "lib/glad.h"
+
 #include <glm/glm.hpp>
+#include "lib/glad.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>

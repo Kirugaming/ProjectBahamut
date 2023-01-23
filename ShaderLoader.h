@@ -18,6 +18,7 @@ public:
     unsigned int shaderProgramID;
 
 
+    ShaderLoader();
 
     ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource);
 

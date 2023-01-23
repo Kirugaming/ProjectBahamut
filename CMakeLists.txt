@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lw
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
 
 set(SOURCE_FILES SpriteRenderer.cpp GameObject.cpp ShaderLoader.cpp window.cpp Texture.cpp )
-set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h Scene.cpp Scene.h Player.cpp Player.h)
+set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h lib/glad.c Texture.h window.h camera.h Player.cpp Player.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h)
 
 
 
@@ -22,15 +22,14 @@ set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} )
 
-
+find_package(OpenGL REQUIRED)
 
 # glfw3
 find_package(glfw3 REQUIRED)
 target_link_libraries(${PROJECT_NAME} glfw)
 
 
-# glad
-link_libraries(GLAD lib/glad.c)
+
 # stb
 link_libraries(STB_IMAGE lib/stb_image.h)
 # imgui

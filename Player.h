@@ -9,7 +9,11 @@
 
 class Player : GameObject {
 public:
-    Player(const std::string &imgSource, ShaderLoader *shader, glm::mat4 transform);
+    Player(const std::string &imgSource, ShaderLoader &shader, glm::mat4 transform);
+
+    Player(const char string[8], glm::mat4 mat1);
+
+    Player(const std::string &imgSource, glm::mat4 transform);
 
     void editProjection(glm::mat4 value);
 
@@ -17,6 +21,8 @@ public:
 
 
     void draw();
+
+    void controls();
 };
 
 

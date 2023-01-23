@@ -4,14 +4,18 @@
 
 #include "Player.h"
 
-Player::Player(const std::string &imgSource, ShaderLoader *shader, glm::mat4 transform) : GameObject(imgSource, shader, transform) {
-    this->scale(glm::vec3(.5f, .5f, .5f));
+
+Player::Player(const char* imgSource, glm::mat4 transform) : GameObject("player", imgSource, transform) {
+    //this->scale(glm::vec3(.5f, .5f, .5f));
     this->transformVector(glm::vec3(0.0f, -0.9f, 0.0f));
 }
 
 void Player::draw() {
-    //GameObject::rotate(.1f, glm::vec3(1.0f, 0.0f, 1.0f));
     GameObject::draw();
+}
+
+void Player::controls() {
+
 }
 
 void Player::editProjection(glm::mat4 value) {
@@ -20,3 +24,6 @@ void Player::editProjection(glm::mat4 value) {
 void Player::editView(glm::mat4 value) {
     this->view = value;
 }
+
+
+

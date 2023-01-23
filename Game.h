@@ -6,7 +6,7 @@
 #define PROJECTBAHAMUT_GAME_H
 
 
-#include "Scene.h"
+#include <unordered_map>
 #include "camera.h"
 #include "Player.h"
 
@@ -14,13 +14,13 @@ class Game {
 public:
     std::unordered_map<std::string, GameObject> sceneMap;
     Camera camera;
-    Player player;
 
     Game();
 
 
 
     void drawScene();
+
 };
 
 
