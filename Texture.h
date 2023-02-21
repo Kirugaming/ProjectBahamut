@@ -18,12 +18,12 @@ public:
 
     const char *imgSource;
 
-    unsigned int aTexture{};
+    unsigned int textureId{};
 
     void bindTexture() const;
     void unbindTexture() const;
 
-    void changeTexture(const char *imgSource);
+    void changeTexture(const char *imgSource) const;
 
 };
 

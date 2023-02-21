@@ -12,12 +12,13 @@
 
 EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
 // dear imgui interface stuff
+// start imgui stuff
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true); // link to window
     ImGui_ImplOpenGL3_Init();
-    ImGui::StyleColorsDark();
+    ImGui::StyleColorsDark(); // some settings
 
 
 }
@@ -35,7 +36,7 @@ void EngineGUI::renderFrames() {
     //ImGui::ShowDemoWindow();
 
     for (std::pair<std::string, GameObject> pair : this->gamePointer->sceneMap) {
-        // if char[] is empty then give button with "\0" name
+        // if char[] is empty then give button with blank name
         if (pair.second.name[0] == '\0') {
             if (ImGui::Button(" ")) {
                 std::cout << "Clicked on " << pair.first << std::endl;
@@ -52,7 +53,7 @@ void EngineGUI::renderFrames() {
 
     // if right click on window then show popup
     if (ImGui::BeginPopupContextWindow()) {
-        if (ImGui::MenuItem("Add Object")) {
+        if (ImGui::MenuItem("Add Object")) { // if clicked then run below
             std::cout << "Add Object" << std::endl;
             selectedObject = GameObject();
             // add number to name if same name already exists in sceneMap
@@ -64,6 +65,7 @@ void EngineGUI::renderFrames() {
             }
             this->gamePointer->sceneMap.insert(std::pair<std::string, GameObject>(selectedObject.name, selectedObject));
         }
+
         ImGui::EndPopup();
     }
 

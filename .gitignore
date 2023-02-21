@@ -1,7 +1,9 @@
 /GLAD
-/GLFW
+/include/GLFW
 /lib/
 /include/
+
 /build
+/.build
 /cmake-build-debug
 /.vscode

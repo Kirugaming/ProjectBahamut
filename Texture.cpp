@@ -6,33 +6,11 @@
 #include "Texture.h"
 #include "lib/glad.h"
 
-Texture::Texture() : imgSource("sillycat.png") {
-    glGenTextures(1, &aTexture);
-    glBindTexture(GL_TEXTURE_2D, aTexture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // load and generate the texture
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char *data = stbi_load(imgSource, &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+Texture::Texture() : Texture("sillycat.jpg") {
 }
 Texture::Texture(const char *imgSource) : imgSource(imgSource) {
-    glGenTextures(1, &aTexture);
-    glBindTexture(GL_TEXTURE_2D, aTexture);
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     // wrapping
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -62,18 +40,26 @@ Texture::Texture(const char *imgSource) : imgSource(imgSource) {
 }
 
 void Texture::bindTexture() const {
-    glBindTexture(GL_TEXTURE_2D, this->aTexture);
+    glBindTexture(GL_TEXTURE_2D, this->textureId);
 }
 
 void Texture::unbindTexture() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::changeTexture(const char *imgSourceP) {
-    this->imgSource = imgSourceP;
-    this->~Texture();
-    std::cout << "test" << std::endl;
-    new(this) Texture(imgSourceP);
-}
+void Texture::changeTexture(const char *imgSource) const {
+    int width, height, nrChannels;
+    unsigned char* img = stbi_load(imgSource, &width, &height, &nrChannels, STBI_rgb_alpha);
 
+    if (img == nullptr) {
+        std::cout << "Image failed to load: " << stbi_failure_reason() << std::endl;
+        return;
+    }
+
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(img);
+}
 

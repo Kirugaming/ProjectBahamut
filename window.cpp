@@ -11,9 +11,9 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, TITLE, nullptr, nullptr);
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, TITLE, nullptr, nullptr); // making the window and it's settings
+    glfwMakeContextCurrent(window); // renders in the window
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // the resize window method
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Glad failed to Initialize!" << std::endl;
@@ -33,29 +33,29 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-
-    bool show = false;
-
     ImVec4 skyboxColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        // skybox color
+        glClearColor(skyboxColor.x * skyboxColor.w, skyboxColor.y * skyboxColor.w, skyboxColor.z * skyboxColor.w, skyboxColor.w);
+        // camera controls
         keyPressed(window, game, deltaTime);
 
-        glClearColor(skyboxColor.x * skyboxColor.w, skyboxColor.y * skyboxColor.w, skyboxColor.z * skyboxColor.w, skyboxColor.w);
+        // helps so that you can't see through an object
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
 
 
-
+        // draw all scene game objects
         game.drawScene();
 
 
-
+        // draw engine ui
         engineGui.renderFrames();
 
 
@@ -64,13 +64,16 @@ int main() {
 
 
         glfwSwapBuffers(window);
+        //  callbacks and such
         glfwPollEvents();
     }
 
+    // shutdown engine ui
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
+    // shutdown rendering
     glfwTerminate();
 }
 

@@ -14,6 +14,7 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     vertexFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     fragmentFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
+    // opening up the shader files
     try {
         vertexFile.open(vertexSource);
         fragmentFile.open(fragmentSource);
