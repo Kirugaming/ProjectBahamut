@@ -74,8 +74,9 @@ void GameObject::draw() {
     glm::mat4 viewRef = this->view;
 
     // check if texture model is changed
-    // TODO: Fix so its not called every frame
+    if (strcmp(this->textureModel, this->sprite.texture->imgSource) != 0) {
         this->sprite.texture->changeTexture(this->textureModel);
+    }
 
 
     // these methods apply rotation, position, and scale to update shader

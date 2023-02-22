@@ -23,7 +23,7 @@ public:
     void bindTexture() const;
     void unbindTexture() const;
 
-    void changeTexture(const char *imgSource) const;
+    void changeTexture(const char *imgSource);
 
 };
 

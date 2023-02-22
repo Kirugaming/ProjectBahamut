@@ -47,7 +47,7 @@ void Texture::unbindTexture() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::changeTexture(const char *imgSource) const {
+void Texture::changeTexture(const char *imgSource) {
     int width, height, nrChannels;
     unsigned char* img = stbi_load(imgSource, &width, &height, &nrChannels, STBI_rgb_alpha);
 
@@ -59,6 +59,9 @@ void Texture::changeTexture(const char *imgSource) const {
     glBindTexture(GL_TEXTURE_2D, textureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
     glGenerateMipmap(GL_TEXTURE_2D);
+
+    this->imgSource = imgSource;
+
 
     stbi_image_free(img);
 }
