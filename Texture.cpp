@@ -6,7 +6,7 @@
 #include "Texture.h"
 #include "lib/glad.h"
 
-Texture::Texture() : Texture("sillycat.jpg") {
+Texture::Texture() : Texture("default.png") {
 }
 Texture::Texture(const char *imgSource) : imgSource(imgSource) {
     glGenTextures(1, &textureId);

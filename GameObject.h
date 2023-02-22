@@ -15,7 +15,7 @@ public:
 
     GameObject();
 
-    GameObject(const char* name, const char *imgSource, glm::mat4 transform);
+    GameObject(std::string name, const char *imgSource, glm::mat4 transform);
 
     SpriteRenderer sprite;
 
@@ -26,7 +26,7 @@ public:
 
     glm::vec3 skew;
 
-    char *name;
+    std::string name;
     bool nameEmpty();
 
     char *textureModel;

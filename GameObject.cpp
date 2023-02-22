@@ -6,11 +6,10 @@
 
 #include <utility>
 
-GameObject::GameObject(const char* name, const char* imgSource, glm::mat4 transform)
-        : sprite(imgSource), transform(glm::translate(transform, glm::vec3(0, 0, 0))), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(), textureModel() {
+GameObject::GameObject(std::string name, const char* imgSource, glm::mat4 transform)
+        : sprite(imgSource), transform(glm::translate(transform, glm::vec3(0, 0, 0))), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(std::move(name)), textureModel() {
     // TODO: need to find  a better way to do these 2 strings
-    this->name = new char[strlen(name) + 1];  // idk what this is doing
-    strcpy(this->name, name);
+
     this->textureModel = new char[strlen(imgSource) + 1];
     strcpy(this->textureModel, imgSource);
 
@@ -39,11 +38,10 @@ GameObject::GameObject(const char* name, const char* imgSource, glm::mat4 transf
 
 }
 
-GameObject::GameObject() : sprite("sillycat.jpg"), transform(glm::mat4(1.0f)), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(), textureModel() {
-    this->name = new char[strlen("default") + 1];
-    strcpy(this->name, "default");
-    this->textureModel = new char[strlen("sillycat.jpg") + 1];
-    strcpy(this->textureModel, "sillycat.jpg");
+GameObject::GameObject() : sprite("default.png"), transform(glm::mat4(1.0f)), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(), textureModel() {
+    this->name = "default";
+    this->textureModel = new char[strlen("default.png") + 1];
+    strcpy(this->textureModel, "default.png");
 
 
     this->view = glm::translate(this->view, glm::vec3(0.0f, 0.0f, -3.0f));

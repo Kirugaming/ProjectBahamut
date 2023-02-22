@@ -37,13 +37,16 @@ void EngineGUI::renderFrames() {
 
     for (std::pair<std::string, GameObject> pair : this->gamePointer->sceneMap) {
         // if char[] is empty then give button with blank name
-        if (pair.second.name[0] == '\0') {
+        if (pair.second.name.empty()) {
             if (ImGui::Button(" ")) {
                 std::cout << "Clicked on " << pair.first << std::endl;
                 this->selectedObject = pair.second;
             }
         } else {
-            if (ImGui::Button(pair.second.name)) {
+            char nameBuffer[256];
+            std::strcpy(nameBuffer,pair.second.name.c_str());
+            if (ImGui::Button(nameBuffer)) {
+                //TODO camera goes to object when clicked
                 std::cout << "Clicked on " << pair.first << std::endl;
                 this->selectedObject = pair.second;
             }
@@ -57,10 +60,10 @@ void EngineGUI::renderFrames() {
             std::cout << "Add Object" << std::endl;
             selectedObject = GameObject();
             // add number to name if same name already exists in sceneMap
-            selectedObject.name = (char*) "New Object";
+            selectedObject.name = "New Object";
             int i = 1;
             while (this->gamePointer->sceneMap.find(selectedObject.name) != this->gamePointer->sceneMap.end()) {
-                selectedObject.name = (char*) std::string("New Object " + std::to_string(i)).c_str();
+                selectedObject.name = std::string("New Object " + std::to_string(i)).c_str();
                 i++;
             }
             this->gamePointer->sceneMap.insert(std::pair<std::string, GameObject>(selectedObject.name, selectedObject));
@@ -82,12 +85,17 @@ void EngineGUI::renderFrames() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void EngineGUI::objectEditWindow(const GameObject& gameObject) {
+void EngineGUI::objectEditWindow( GameObject& gameObject) {
     ImGui::Begin("Object Editor");
     ImGui::Text("This is the object editor window!");
     ImGui::Separator();
     ImGui::Text("Object Name:");
-    ImGui::InputText("##ObjectName", gameObject.name, 64);
+    char nameBuffer[256];
+    std::strcpy(nameBuffer,gameObject.name.c_str());
+    if(ImGui::InputText("##ObjectName",nameBuffer,64)){
+        gameObject.name=nameBuffer;
+    }
+
     ImGui::Separator();
     ImGui::Text("Texture/Model:");
     ImGui::InputText("##TextureModel", gameObject.textureModel, 64);

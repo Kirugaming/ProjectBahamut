@@ -18,7 +18,7 @@ public:
 
     void renderFrames();
 
-    static void objectEditWindow(const GameObject& gameObject);
+    static void objectEditWindow( GameObject& gameObject);
 };
 
 
