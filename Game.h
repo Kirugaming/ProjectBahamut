@@ -7,9 +7,10 @@
 
 
 #include <unordered_map>
+#include <string>
 #include "camera.h"
-#include "Player.h"
 
+#include "GameObject.h"
 class Game {
 public:
     std::unordered_map<std::string, GameObject> sceneMap;
