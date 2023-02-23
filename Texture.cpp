@@ -49,18 +49,18 @@ void Texture::unbindTexture() const {
 
 void Texture::changeTexture(const char *imgSource) {
     int width, height, nrChannels;
+    // load image into program
     unsigned char* img = stbi_load(imgSource, &width, &height, &nrChannels, STBI_rgb_alpha);
-
     if (img == nullptr) {
         std::cout << "Image failed to load: " << stbi_failure_reason() << std::endl;
         return;
     }
-
+    // load the img into opengl
     glBindTexture(GL_TEXTURE_2D, textureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(GL_TEXTURE_2D); // mipmap is for viewing distance's
 
-    this->imgSource = imgSource;
+    this->imgSource = imgSource; // for comparison with a newer image in texture change
 
 
     stbi_image_free(img);

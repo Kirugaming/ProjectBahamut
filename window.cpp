@@ -23,10 +23,11 @@ int main() {
 
 
 
-    Game game;
+    Game game; // to create the game objects for now
 
     EngineGUI engineGui(window, &game);
 
+    // for camera controls right now
     float deltaTime;
     float currentFrame = 0.0;
     float lastFrame;

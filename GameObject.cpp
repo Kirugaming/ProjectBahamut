@@ -8,7 +8,6 @@
 
 GameObject::GameObject(std::string name, const char* imgSource, glm::mat4 transform)
         : sprite(imgSource), transform(glm::translate(transform, glm::vec3(0, 0, 0))), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(std::move(name)), textureModel() {
-    // TODO: need to find  a better way to do these 2 strings
 
     this->textureModel = new char[strlen(imgSource) + 1];
     strcpy(this->textureModel, imgSource);
@@ -37,33 +36,8 @@ GameObject::GameObject(std::string name, const char* imgSource, glm::mat4 transf
     this->scale[2] = this->transform[2][2];
 
 }
-
-GameObject::GameObject() : sprite("default.png"), transform(glm::mat4(1.0f)), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(), textureModel() {
-    this->name = "default";
-    this->textureModel = new char[strlen("default.png") + 1];
-    strcpy(this->textureModel, "default.png");
-
-
-    this->view = glm::translate(this->view, glm::vec3(0.0f, 0.0f, -3.0f));
-    this->projection = glm::perspective(glm::radians(45.0f), (float)640 / (float)480, 0.1f, 100.0f);
-
-    this->sprite.shaderLoader.editShaderWithMat4("transform", this->transform);
-    this->sprite.shaderLoader.editShaderWithMat4("projection", this->projection);
-    this->sprite.shaderLoader.editShaderWithMat4("view", this->view);
-
-    // get position from transform matrix
-    this->position[0] = this->transform[3][0];
-    this->position[1] = this->transform[3][1];
-    this->position[2] = this->transform[3][2];
-    // get rotation from transform matrix
-    this->rotation[0] = this->transform[0][0];
-    this->rotation[1] = this->transform[1][1];
-    this->rotation[2] = this->transform[2][2];
-    // get scale from transform matrix
-    this->scale[0] = this->transform[0][0];
-    this->scale[1] = this->transform[1][1];
-    this->scale[2] = this->transform[2][2];
-
+// default constructor
+GameObject::GameObject() : GameObject("default", "default.png", glm::mat4(1.0f)) {
 }
 
 
@@ -71,8 +45,10 @@ void GameObject::draw() {
     glm::mat4 projectionRef = this->projection;
     glm::mat4 viewRef = this->view;
 
+
     // check if texture model is changed
     if (strcmp(this->textureModel, this->sprite.texture->imgSource) != 0) {
+        std::cout << "changed";
         this->sprite.texture->changeTexture(this->textureModel);
     }
 

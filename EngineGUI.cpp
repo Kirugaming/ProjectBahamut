@@ -33,7 +33,7 @@ void EngineGUI::renderFrames() {
     ImGui::Separator();
     ImGui::Text("Game Objects:");
 
-    //ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow(); // test window for imgui that helps reference its many functions
 
     for (std::pair<std::string, GameObject> pair : this->gamePointer->sceneMap) {
         // if char[] is empty then give button with blank name
@@ -46,7 +46,6 @@ void EngineGUI::renderFrames() {
             char nameBuffer[256];
             std::strcpy(nameBuffer,pair.second.name.c_str());
             if (ImGui::Button(nameBuffer)) {
-                //TODO camera goes to object when clicked
                 std::cout << "Clicked on " << pair.first << std::endl;
                 this->selectedObject = pair.second;
             }
@@ -63,7 +62,7 @@ void EngineGUI::renderFrames() {
             selectedObject.name = "New Object";
             int i = 1;
             while (this->gamePointer->sceneMap.find(selectedObject.name) != this->gamePointer->sceneMap.end()) {
-                selectedObject.name = std::string("New Object " + std::to_string(i)).c_str();
+                selectedObject.name = std::string("New Object " + std::to_string(i));
                 i++;
             }
             this->gamePointer->sceneMap.insert(std::pair<std::string, GameObject>(selectedObject.name, selectedObject));
@@ -85,21 +84,24 @@ void EngineGUI::renderFrames() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void EngineGUI::objectEditWindow( GameObject& gameObject) {
+void EngineGUI::objectEditWindow(GameObject &gameObject) {
     ImGui::Begin("Object Editor");
     ImGui::Text("This is the object editor window!");
     ImGui::Separator();
-    ImGui::Text("Object Name:");
+    ImGui::Text("Object Name:");  // Where users can edit the name of game objects
     char nameBuffer[256];
-    std::strcpy(nameBuffer,gameObject.name.c_str());
-    if(ImGui::InputText("##ObjectName",nameBuffer,64)){
-        gameObject.name=nameBuffer;
+    std::strcpy(nameBuffer, gameObject.name.c_str());
+    if (ImGui::InputText("##ObjectName", nameBuffer, 64)) {
+        std::cout << "InputText changed the name to " << nameBuffer << std::endl;
+        gameObject.name = nameBuffer;
+        std::cout << "GameObject name is now " << gameObject.name << std::endl;
     }
 
     ImGui::Separator();
-    ImGui::Text("Texture/Model:");
+    ImGui::Text("Texture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
     ImGui::InputText("##TextureModel", gameObject.textureModel, 64);
     ImGui::Separator();
+    // where users can change various transformation stuff
     ImGui::Text("Object Position:");
     ImGui::DragFloat3("##Position xyz", &gameObject.position[0], 0.005f);
     ImGui::Separator();
