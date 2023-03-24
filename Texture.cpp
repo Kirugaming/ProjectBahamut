@@ -4,7 +4,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Texture.h"
-#include "lib/glad.h"
+#include <glad/glad.h>
 
 Texture::Texture() : Texture("default.png") {
 }

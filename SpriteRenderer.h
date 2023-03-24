@@ -6,7 +6,7 @@
 #define PROJECTBAHAMUT_SPRITERENDERER_H
 
 
-#include "lib/glad.h"
+#include <glad/glad.h>
 #include "Texture.h"
 #include "ShaderLoader.h"
 #include <GLFW/glfw3.h>

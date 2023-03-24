@@ -6,7 +6,7 @@
 #define PROJECTBAHAMUT_TEXTURE_H
 
 #include <iostream>
-#include "lib/stb_image.h"
+#include <stb_image.h>
 
 
 class Texture{

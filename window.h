@@ -6,13 +6,13 @@
 #define PROJECTBAHAMUT_WINDOW_H
 
 #include <iostream>
-#include "lib/glad.h"
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "EngineGUI.h"
 #include "Game.h"
-#include "lib/imgui/imgui.h"
-#include "lib/imgui/imgui_impl_glfw.h"
-#include "lib/imgui/imgui_impl_opengl3.h"
+#include <imgui.h>
+#include "lib/imgui_impl_glfw.h"
+#include "lib/imgui_impl_opengl3.h"
 
 
 int WIN_WIDTH = 640;

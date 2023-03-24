@@ -7,6 +7,8 @@
 
 
 #include "Game.h"
+#include "lib/imgui_impl_glfw.h"
+#include "lib/imgui_impl_opengl3.h"
 
 class EngineGUI {
 public:

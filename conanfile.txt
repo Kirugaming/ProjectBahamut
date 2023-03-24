@@ -1,0 +1,15 @@
+[requires]
+glfw/3.3.8
+glm/cci.20230113
+imgui/cci.20230105+1.89.2.docking
+glad/0.1.36
+assimp/5.2.2
+stb/cci.20220909
+
+[options]
+glad/*:gl_profile=core
+*:shared=False
+
+[generators]
+CMakeDeps
+CMakeToolchain
