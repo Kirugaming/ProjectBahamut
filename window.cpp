@@ -11,7 +11,11 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, TITLE, nullptr, nullptr); // making the window and it's settings
+    // get monitor to go sudo fullscreen
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* monitorInfo = glfwGetVideoMode(monitor);
+
+    GLFWwindow* window = glfwCreateWindow(monitorInfo->width, monitorInfo->height, TITLE, nullptr, nullptr); // making the window and it's settings
     glfwMakeContextCurrent(window); // renders in the window
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // the resize window method
 

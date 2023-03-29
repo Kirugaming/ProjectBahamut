@@ -16,6 +16,8 @@ public:
 
     GameObject selectedObject;
 
+    std::vector<Texture> iconAssets;
+
     EngineGUI(GLFWwindow* window, Game* game);
 
     void renderFrames();

@@ -19,6 +19,9 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui_ImplOpenGL3_Init();
     ImGui::StyleColorsDark(); // some settings
 
+    // Load Icon Assets into Memory
+    iconAssets.insert(iconAssets.end(), Texture("cube-solid.png"));
+
 
 }
 
@@ -27,12 +30,29 @@ void EngineGUI::renderFrames() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Begin("Project Bahamut Test");
-    ImGui::Text("Hello, world!");
+    // window settings
+    ImGuiWindowFlags guiWindowFlags = 0;
+    guiWindowFlags |= ImGuiWindowFlags_NoMove;
+    guiWindowFlags |= ImGuiWindowFlags_NoResize;
+    guiWindowFlags |= ImGuiWindowFlags_NoCollapse;
+    guiWindowFlags |= ImGuiWindowFlags_NoNav;
+    guiWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+    // set positions of these imgui windows
+    // set main one to top right corner
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 300, 0), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
+
+    ImGui::Begin("Game Object Editor", reinterpret_cast<bool *>(true), guiWindowFlags);
+    ImGui::Text("Game Object Editor\t\t");
+    ImGui::SameLine();
+    ImGui::Button("Map Editor");
     ImGui::Separator();
     ImGui::Text("Game Objects:");
 
-    //ImGui::ShowDemoWindow(); // test window for imgui that helps reference its many functions
+
+
+    ImGui::ShowDemoWindow(); // test window for imgui that helps reference its many functions
 
     for (std::pair<std::string, GameObject> pair : this->gamePointer->sceneMap) {
         // if char[] is empty then give button with blank name
@@ -42,12 +62,20 @@ void EngineGUI::renderFrames() {
                 this->selectedObject = pair.second;
             }
         } else {
-            char nameBuffer[256];
-            std::strcpy(nameBuffer,pair.second.name.c_str());
-            if (ImGui::Button(nameBuffer)) {
+            // icon
+            auto iconTexuture = reinterpret_cast<ImTextureID>(iconAssets[0].textureId);
+            ImGui::PushID("gameobject_icon");
+
+            //                                                              | this part rotates horizontally
+            ImGui::Image(iconTexuture, ImVec2(20, 20), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::SameLine();
+            std::string nameBuffer = pair.second.name;
+            if (ImGui::Button(nameBuffer.c_str())) {
                 std::cout << "Clicked on " << pair.first << std::endl;
                 this->selectedObject = pair.second;
             }
+
+            ImGui::PopID();
         }
 
     }
@@ -84,7 +112,9 @@ void EngineGUI::renderFrames() {
 }
 
 void EngineGUI::objectEditWindow(GameObject &gameObject) {
-    ImGui::Begin("Object Editor");
+    ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 300, 300), ImGuiCond_Once);
+    ImGui::Begin("Object Editor", reinterpret_cast<bool *>(true), ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
     ImGui::Text("This is the object editor window!");
     ImGui::Separator();
     ImGui::Text("Object Name:");  // Where users can edit the name of game objects
