@@ -92,5 +92,8 @@ void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 // need to have more to edit the shader
-
+void ShaderLoader::setInt(const std::string &name, int value) const
+{
+    glUniform1i(glGetUniformLocation(shaderProgramID, name.c_str()), value);
+}
 

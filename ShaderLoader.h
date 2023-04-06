@@ -23,8 +23,8 @@ public:
     ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource);
 
     ShaderLoader & useShader() const;
-
     void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
+    void setInt(const std::string &name, int value) const;
 };
 
 
