@@ -15,24 +15,19 @@ public:
 
     GameObject();
 
-    GameObject(std::string name, const char *imgSource, glm::mat4 transform);
+    GameObject(std::string name, const std::string &imgSource, glm::mat4 transform);
 
     SpriteRenderer sprite;
 
 
     glm::mat4 transform;
 
-    glm::vec3 translation;
 
     glm::vec3 skew;
 
     std::string name;
-    bool nameEmpty();
 
-    char *textureModel;
-    float *position;
-    float *rotation;
-    float *scale;
+    std::string textureModel;
 
     glm::vec4 perspective;
     glm::mat4 projection = glm::mat4(1.0f);
@@ -42,13 +37,20 @@ public:
 
 
 
-    void rotate(float angle, glm::vec3 vector);
+    void rotate(float angle, glm::vec3 axis);
+    void translate(const glm::vec3 &offset);
+    void scale(const glm::vec3 &scale);
 
-    void transformVector(glm::vec3 posChange);
+    glm::vec3 getPosition();
 
     void draw();
 
 
+    glm::vec3 getRotation() const;
+
+    glm::vec3 getScale();
+
+    void rotateXYZ(glm::vec3 eulerAngles);
 };
 
 

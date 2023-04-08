@@ -9,6 +9,7 @@ int main() {
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // get monitor to go sudo fullscreen
@@ -18,6 +19,7 @@ int main() {
     GLFWwindow* window = glfwCreateWindow(monitorInfo->width, monitorInfo->height, TITLE, nullptr, nullptr); // making the window and it's settings
     glfwMakeContextCurrent(window); // renders in the window
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // the resize window method
+
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Glad failed to Initialize!" << std::endl;
@@ -38,14 +40,14 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    ImVec4 skyboxColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
         // skybox color
-        glClearColor(skyboxColor.x * skyboxColor.w, skyboxColor.y * skyboxColor.w, skyboxColor.z * skyboxColor.w, skyboxColor.w);
+        glClearColor(.2f, .3f, .3f, 1.0f);
+
         // camera controls
         keyPressed(window, game, deltaTime);
 
@@ -54,10 +56,10 @@ int main() {
 
 
 
-
-
         // draw all scene game objects
         game.drawScene();
+
+
 
 
         // draw engine ui

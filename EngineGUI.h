@@ -14,7 +14,7 @@ class EngineGUI {
 public:
     Game* gamePointer;
 
-    GameObject selectedObject;
+    GameObject *selectedObject;
 
     std::vector<Texture> iconAssets;
 
@@ -22,7 +22,7 @@ public:
 
     void renderFrames();
 
-    static void objectEditWindow(GameObject &gameObject);
+    static void objectEditWindow(GameObject *gameObject);
 };
 
 

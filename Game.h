@@ -13,7 +13,7 @@
 #include "GameObject.h"
 class Game {
 public:
-    std::unordered_map<std::string, GameObject> sceneMap;
+    std::vector<GameObject*> sceneList;
     Camera camera;
 
     Game();

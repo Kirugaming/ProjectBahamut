@@ -15,15 +15,13 @@
 class SpriteRenderer {
 public:
 
-    SpriteRenderer();
 
-    explicit SpriteRenderer(std::string& imgSource);
 
-    SpriteRenderer(std::string& imgSource, ShaderLoader sl);
+    SpriteRenderer(GLfloat *vertices, unsigned int *indices, unsigned int sizeOfVertices, unsigned int sizeOfIndices);
 
-    SpriteRenderer(const char *imgSource);
+    SpriteRenderer(const std::string &imgSource, ShaderLoader sl);
 
-    SpriteRenderer(const char *imgSource, ShaderLoader sl);
+    explicit SpriteRenderer(const std::string& imgSource);
 
     Texture *texture;
 
@@ -33,10 +31,12 @@ public:
 
     void changeSprite(std::string &imgSource);
 
+
     void drawSprite() const;
+private:
 
 
-    void changeSprite(const char *imgSource);
+
 };
 
 

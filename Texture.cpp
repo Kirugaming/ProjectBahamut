@@ -8,7 +8,7 @@
 
 Texture::Texture() : Texture("default.png") {
 }
-Texture::Texture(const char *imgSource) : imgSource(imgSource) {
+Texture::Texture(const std::string& imgSource) : imgSource(imgSource) {
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     // wrapping
@@ -21,7 +21,7 @@ Texture::Texture(const char *imgSource) : imgSource(imgSource) {
     stbi_set_flip_vertically_on_load(true);
 
     int width, height, nrChannels;
-    unsigned char* img = stbi_load(imgSource, &width, &height, &nrChannels, STBI_rgb_alpha);
+    unsigned char* img = stbi_load(imgSource.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 
     if (img == nullptr) {
         std::cout << "Image failed to load: " << stbi_failure_reason() << std::endl;
@@ -40,6 +40,7 @@ Texture::Texture(const char *imgSource) : imgSource(imgSource) {
 }
 
 void Texture::bindTexture() const {
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->textureId);
 }
 
@@ -47,10 +48,10 @@ void Texture::unbindTexture() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::changeTexture(const char *imgSource) {
+void Texture::changeTexture(const std::string& filename) {
     int width, height, nrChannels;
     // load image into program
-    unsigned char* img = stbi_load(imgSource, &width, &height, &nrChannels, STBI_rgb_alpha);
+    unsigned char* img = stbi_load(filename.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
     if (img == nullptr) {
         std::cout << "Image failed to load: " << stbi_failure_reason() << std::endl;
         return;
@@ -60,7 +61,7 @@ void Texture::changeTexture(const char *imgSource) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
     glGenerateMipmap(GL_TEXTURE_2D); // mipmap is for viewing distance's
 
-    this->imgSource = imgSource; // for comparison with a newer image in texture change
+    this->imgSource = filename; // for comparison with a newer image in texture change
 
 
     stbi_image_free(img);
