@@ -6,16 +6,16 @@
 
 
 void SpriteRenderer::drawSprite() const {
-    texture->bindTexture();
-    shaderLoader.useShader();
 
     glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
 }
 
-SpriteRenderer::SpriteRenderer(const char* imgSource, ShaderLoader sl) : shaderLoader(sl), texture(new Texture(imgSource)) {
+SpriteRenderer::SpriteRenderer(const std::string& imgSource, ShaderLoader sl) : shaderLoader(sl), texture(new Texture(imgSource)) {
     float vertices[] = {
-            // positions                         // Texture coords
+            // positions (x,y,z)                // Texture coords (x,y)
             -1.0f,  -1.0f, 0.0f,    0.0f, 0.0f, // top right
             -1.0f, 1.0f, 0.0f,      0.0f, 1.0f, // bottom right
             1.0f, 1.0f, 0.0f,     1.0f, 1.0f, // bottom left
@@ -28,28 +28,29 @@ SpriteRenderer::SpriteRenderer(const char* imgSource, ShaderLoader sl) : shaderL
             1, 2, 3  // second triangle
     };
 
+    // VAO
     glGenVertexArrays(1, &vertexArray);
-    glGenBuffers(1, &vertexBuffer);
     glBindVertexArray(vertexArray);
-    glGenBuffers(1, &elementBuffer);
-    // bring square vertices into the buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // VBO
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    // bring square vertices into the buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) nullptr);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // EBO
+    glGenBuffers(1, &elementBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    // position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) nullptr);
-    glEnableVertexAttribArray(0);
-    // Texture coord
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-
-
-
+    glBindVertexArray(0);
 
 }
+
+
 // default constructor
-SpriteRenderer::SpriteRenderer(const char* imgSource) : SpriteRenderer(imgSource, *new ShaderLoader()) {}
+SpriteRenderer::SpriteRenderer(const std::string& imgSource) : SpriteRenderer(imgSource, *new ShaderLoader()) {}

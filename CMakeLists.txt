@@ -6,15 +6,9 @@ project("ProjectBahamut")
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 #set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/build/")
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
 
 set(SOURCE_FILES SpriteRenderer.cpp GameObject.cpp ShaderLoader.cpp window.cpp Texture.cpp )
-set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h)
-
+set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Terrain.cpp Terrain.h)
 
 
 

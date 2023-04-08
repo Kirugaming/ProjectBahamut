@@ -5,10 +5,10 @@
 #include "ShaderLoader.h"
 
 // default constructor
-ShaderLoader::ShaderLoader() : ShaderLoader("shader/shader.vert", "shader/shader.frag") {}
+ShaderLoader::ShaderLoader() : ShaderLoader("shaders/shader.vert", "shaders/shader.frag") {}
 
 ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource) {
-    // load shader files
+    // load shaders files
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vertexFile;
@@ -17,7 +17,7 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
     vertexFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     fragmentFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
-    // opening up the shader files
+    // opening up the shaders files
     try {
         vertexFile.open(vertexSource);
         fragmentFile.open(fragmentSource);
@@ -40,57 +40,71 @@ ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& f
 
     // load shaders
     unsigned int vertex, fragment;
-    int success;
-    char infoLog[512];
-
     // vertex
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, nullptr);
     glCompileShader(vertex);
     // if errors
-    glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
-    if(!success) {
-        glGetShaderInfoLog(vertex, 512, nullptr, infoLog);
-        std::cout << "Vertex Shader failed to compile!\n" << infoLog << std::endl;
-    }
+    getShaderCompileInfoLog(vertex);
 
     // fragment
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, nullptr);
     glCompileShader(fragment);
     // if errors
-    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
-    if(!success) {
-        glGetShaderInfoLog(fragment, 512, nullptr, infoLog);
-        std::cout << "Fragment shader failed to compile!\n" << infoLog << std::endl;
-    }
+    getShaderCompileInfoLog(fragment);
+
+    // shader program
 
     shaderProgramID = glCreateProgram();
+    if (shaderProgramID <= 0) {
+        std::cout << "Shader program creation failed!" << std::endl;
+        return;
+    }
     glAttachShader(shaderProgramID, vertex);
     glAttachShader(shaderProgramID, fragment);
     glLinkProgram(shaderProgramID);
     // program errors
-    glGetShaderiv(shaderProgramID, GL_COMPILE_STATUS, &success);
-    if(!success) {
-        glGetShaderInfoLog(shaderProgramID, 512, nullptr, infoLog);
-        std::cout << "Shader program failed to link!\n" << infoLog << std::endl;
-    }
+    getShaderProgramLinkInfoLog(shaderProgramID);
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
 
-ShaderLoader & ShaderLoader::useShader() const {
+ShaderLoader& ShaderLoader::useShader() {
+    if (this->shaderProgramID == 0) {
+        throw std::runtime_error("No shader program loaded");
+    }
     glUseProgram(this->shaderProgramID);
-    return const_cast<ShaderLoader &>(*this);
+    return *this;
 }
-
 // a bunch of methods that allow dev to edit the shaders uniform variables
 
 void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
-    this->useShader();
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
-// need to have more to edit the shader
+
+void ShaderLoader::getShaderProgramLinkInfoLog(unsigned int shaderProgramID) {
+    int success;
+    char infoLog[512];
+    glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &success);
+    if(!success) {
+        glGetProgramInfoLog(shaderProgramID, 512, nullptr, infoLog);
+        std::cout << "Shader program failed to link! - " << infoLog << std::endl;
+    }
+}
+
+void ShaderLoader::getShaderCompileInfoLog(unsigned int shaderID) {
+    int success;
+    char infoLog[512];
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+    if(!success) {
+        glGetShaderInfoLog(shaderID, 512, nullptr, infoLog);
+        // get shaders type and print
+        std::cout << "Shader failed to compile! - " << infoLog << std::endl;
+    }
+
+}
+// need to have more to edit the shaders
 
 
