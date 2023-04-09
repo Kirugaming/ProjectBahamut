@@ -1,9 +1,7 @@
 //
 // Created by S722778 on 9/12/2022.
 //
-
 #include "window.h"
-#include "Model.h"
 
 int main() {
     if (!glfwInit()) {
@@ -11,11 +9,17 @@ int main() {
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, TITLE, nullptr, nullptr); // making the window and it's settings
+    // get monitor to go sudo fullscreen
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* monitorInfo = glfwGetVideoMode(monitor);
+
+    GLFWwindow* window = glfwCreateWindow(monitorInfo->width, monitorInfo->height, TITLE, nullptr, nullptr); // making the window and it's settings
     glfwMakeContextCurrent(window); // renders in the window
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // the resize window method
+
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Glad failed to Initialize!" << std::endl;
@@ -35,17 +39,15 @@ int main() {
     float lastFrame;
 
     glEnable(GL_DEPTH_TEST);
-    const char *path[]={"backpack/backpack.obj", nullptr};
-    Model ourModel(*const_cast<char **>(path));
-    ShaderLoader *myshader=new ShaderLoader();
-    ImVec4 skyboxColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
+
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
         // skybox color
-        glClearColor(skyboxColor.x * skyboxColor.w, skyboxColor.y * skyboxColor.w, skyboxColor.z * skyboxColor.w, skyboxColor.w);
+        glClearColor(.2f, .3f, .3f, 1.0f);
+
         // camera controls
         keyPressed(window, game, deltaTime);
 
@@ -54,16 +56,11 @@ int main() {
 
 
 
-
-
         // draw all scene game objects
-        //game.drawScene();
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        game.drawScene();
 
-        myshader->editShaderWithMat4("model", model);
-        ourModel.Draw( *myshader);
+
+
 
         // draw engine ui
         engineGui.renderFrames();
@@ -104,16 +101,16 @@ void keyPressed(GLFWwindow *window, Game &game, float deltaTime) {
         game.camera.ProcessKeyboard(RIGHT, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        game.camera.setYaw(-0.3f);
+        game.camera.setYaw(-1);
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        game.camera.setPitch(0.3f);
+        game.camera.setPitch(1);
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        game.camera.setPitch(-0.3f);
+        game.camera.setPitch(-1);
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        game.camera.setYaw(0.3f);
+        game.camera.setYaw(1);
     }
 
 }

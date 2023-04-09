@@ -6,34 +6,19 @@
 
 #include <utility>
 
-GameObject::GameObject(std::string name, const char* imgSource, glm::mat4 transform)
-        : sprite(imgSource), transform(glm::translate(transform, glm::vec3(0, 0, 0))), position(new float[3]), rotation(new float[3]), scale(new float[3]), name(std::move(name)), textureModel() {
-
-    this->textureModel = new char[strlen(imgSource) + 1];
-    strcpy(this->textureModel, imgSource);
+GameObject::GameObject(std::string name, const std::string& imgSource, glm::mat4 transform)
+        : sprite(imgSource), transform(transform), name(std::move(name)), textureModel(imgSource) {
 
     // camera stuff
     this->view = glm::translate(this->view, glm::vec3(0.0f, 0.0f, -3.0f));
     this->projection = glm::perspective(glm::radians(45.0f), (float)640 / (float)480, 0.1f, 100.0f);
 
-    // add how an object is viewed to the shader
-    this->sprite.shaderLoader.editShaderWithMat4("transform", this->transform);
+    // add how an object is viewed to the shaders
     this->sprite.shaderLoader.editShaderWithMat4("projection", this->projection);
     this->sprite.shaderLoader.editShaderWithMat4("view", this->view);
 
 
-    // get position from transform matrix
-    this->position[0] = this->transform[3][0];
-    this->position[1] = this->transform[3][1];
-    this->position[2] = this->transform[3][2];
-    // get rotation from transform matrix
-    this->rotation[0] = this->transform[0][0];
-    this->rotation[1] = this->transform[1][1];
-    this->rotation[2] = this->transform[2][2];
-    // get scale from transform matrix
-    this->scale[0] = this->transform[0][0];
-    this->scale[1] = this->transform[1][1];
-    this->scale[2] = this->transform[2][2];
+
 
 }
 // default constructor
@@ -42,66 +27,70 @@ GameObject::GameObject() : GameObject("default", "default.png", glm::mat4(1.0f))
 
 
 void GameObject::draw() {
-    glm::mat4 projectionRef = this->projection;
-    glm::mat4 viewRef = this->view;
+    // Store projection and view matrices as const references to avoid accidental modification
+    const glm::mat4& projectionRef = this->projection;
+    const glm::mat4& viewRef = this->view;
+
+    this->sprite.texture->bindTexture();
+    this->sprite.shaderLoader.useShader();
 
 
-    // check if texture model is changed
-    if (strcmp(this->textureModel, this->sprite.texture->imgSource) != 0) {
-        std::cout << "changed";
+
+
+    // Check if texture model has changed before updating the sprite's texture
+    if (this->textureModel != this->sprite.texture->imgSource) {
+        std::cout << "Texture has changed\n";
         this->sprite.texture->changeTexture(this->textureModel);
     }
 
+    this->sprite.shaderLoader.editShaderWithMat4("model", transform);
+    this->sprite.shaderLoader.editShaderWithMat4("projection", const_cast<glm::mat4 &>(projectionRef));
+    this->sprite.shaderLoader.editShaderWithMat4("view", const_cast<glm::mat4 &>(viewRef));
 
-    // these methods apply rotation, position, and scale to update shader
-    // turn position into a transform mat4
-    glm::mat4 transformRef = glm::translate(glm::mat4(1.0f), glm::vec3(this->position[0], this->position[1], this->position[2]));
-    // turn rotation into a transform mat4
-    transformRef = glm::rotate(transformRef, glm::radians(this->rotation[0]), glm::vec3(1.0f, 0.0f, 0.0f));
-    transformRef = glm::rotate(transformRef, glm::radians(this->rotation[1]), glm::vec3(0.0f, 1.0f, 0.0f));
-    transformRef = glm::rotate(transformRef, glm::radians(this->rotation[2]), glm::vec3(0.0f, 0.0f, 1.0f));
-    // turn scale into a transform mat4
-    transformRef = glm::scale(transformRef, glm::vec3(this->scale[0], this->scale[1], this->scale[2]));
-
-    // update shader with new transform
-    this->sprite.shaderLoader.editShaderWithMat4("transform", transformRef); // TODO: maybe make the shader accept vec3 or translate into mat4 every draw call
-    this->sprite.shaderLoader.editShaderWithMat4("projection", projectionRef);
-    this->sprite.shaderLoader.editShaderWithMat4("view", viewRef);
-
+    // Draw the sprite using the updated shader uniforms
     this->sprite.drawSprite();
 
 
 }
 
-
-void GameObject::transformVector(glm::vec3 posChange) {
-    this->transform = glm::translate(transform, posChange);
-
-    this->position[0] = this->transform[3][0];
-    this->position[1] = this->transform[3][1];
-    this->position[2] = this->transform[3][2];
-
-    this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
-
-}
-/*
-void GameObject::rotate(float angle, glm::vec3 vector) {
-    this->transform = glm::rotate(transform, angle, vector);
-    this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
+void GameObject::translate(const glm::vec3 &offset) {
+    transform = glm::translate(transform, offset);
 }
 
-bool GameObject::nameEmpty() {
-    if (this->name == nullptr) {
-        return true;
+void GameObject::rotate(float angle, glm::vec3 axis) {
+    transform = glm::rotate(transform, glm::radians(angle), axis);
+}
+
+void GameObject::rotateXYZ(glm::vec3 eulerAngles) {
+    glm::mat4 rotationMatrix(1.0f);
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.z), glm::vec3(0, 0, 1));
+    transform = transform * rotationMatrix;
+}
+
+void GameObject::scale(const glm::vec3 &scale) {
+    // it is possible to divide by zero (BAD) so uh dont do that
+    if (scale.x == 0.0f || scale.y == 0.0f || scale.z == 0.0f) {
+        std::cerr << "Scale vector cannot contain 0 values." << std::endl;
+        return; // need better way of doing this
     }
-    return false;
+    transform = glm::scale(transform, scale / getScale());
 }
 
-void GameObject::scale(glm::vec3 scaleBy) {
-    this->transform = glm::scale(transform, scaleBy);
-    this->sprite.shaderLoader.editShaderWithMat4("transform", transform);
+glm::vec3 GameObject::getPosition() {
+    return {transform[3][0], transform[3][1], transform[3][2]};
 }
-*/
 
+glm::vec3 GameObject::getRotation() const {
+    return glm::eulerAngles(glm::quat_cast(transform));
+}
 
+glm::vec3 GameObject::getScale() {
+    return {
+            glm::length(glm::vec3(transform[0][0], transform[0][1], transform[0][2])),
+            glm::length(glm::vec3(transform[1][0], transform[1][1], transform[1][2])),
+            glm::length(glm::vec3(transform[2][0], transform[2][1], transform[2][2]))
+    };
+}
 

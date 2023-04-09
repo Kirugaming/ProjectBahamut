@@ -19,6 +19,9 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui_ImplOpenGL3_Init();
     ImGui::StyleColorsDark(); // some settings
 
+    // Load Icon Assets into Memory
+    iconAssets.insert(iconAssets.end(), Texture("cube-solid.png"));
+
 
 }
 
@@ -27,27 +30,53 @@ void EngineGUI::renderFrames() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Begin("Project Bahamut Test");
-    ImGui::Text("Hello, world!");
+    // window settings
+    ImGuiWindowFlags guiWindowFlags = 0;
+    guiWindowFlags |= ImGuiWindowFlags_NoMove;
+    guiWindowFlags |= ImGuiWindowFlags_NoResize;
+    guiWindowFlags |= ImGuiWindowFlags_NoCollapse;
+    guiWindowFlags |= ImGuiWindowFlags_NoNav;
+    guiWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+    // set positions of these imgui windows
+    // set main one to top right corner
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 300, 0), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
+
+    ImGui::Begin("Game Object Editor", reinterpret_cast<bool *>(true), guiWindowFlags);
+    ImGui::Text("Game Object Editor\t\t");
+    ImGui::SameLine();
+    ImGui::Button("Map Editor");
     ImGui::Separator();
     ImGui::Text("Game Objects:");
 
-    //ImGui::ShowDemoWindow(); // test window for imgui that helps reference its many functions
 
-    for (std::pair<std::string, GameObject> pair : this->gamePointer->sceneMap) {
+
+    ImGui::ShowDemoWindow(); // test window for imgui that helps reference its many functions
+
+
+    for (auto object : this->gamePointer->sceneList) {
         // if char[] is empty then give button with blank name
-        if (pair.second.name.empty()) {
+        if (object->name.empty()) {
             if (ImGui::Button(" ")) {
-                std::cout << "Clicked on " << pair.first << std::endl;
-                this->selectedObject = pair.second;
+                std::cout << "Clicked on " << object->name << std::endl;
+                this->selectedObject = object;
             }
         } else {
-            char nameBuffer[256];
-            std::strcpy(nameBuffer,pair.second.name.c_str());
-            if (ImGui::Button(nameBuffer)) {
-                std::cout << "Clicked on " << pair.first << std::endl;
-                this->selectedObject = pair.second;
+            // icon
+            auto iconTexuture = reinterpret_cast<ImTextureID>(iconAssets[0].textureId);
+            ImGui::PushID("gameobject_icon");
+
+            //                                                              | this part rotates horizontally
+            ImGui::Image(iconTexuture, ImVec2(20, 20), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::SameLine();
+            std::string nameBuffer = object->name;
+            if (ImGui::Button(nameBuffer.c_str())) {
+                std::cout << "Clicked on " << object->name << std::endl;
+                this->selectedObject = object;
             }
+
+            ImGui::PopID();
         }
 
     }
@@ -56,21 +85,26 @@ void EngineGUI::renderFrames() {
     if (ImGui::BeginPopupContextWindow()) {
         if (ImGui::MenuItem("Add Object")) { // if clicked then run below
             std::cout << "Add Object" << std::endl;
-            selectedObject = GameObject();
+            selectedObject = new GameObject();
             // add number to name if same name already exists in sceneMap
-            selectedObject.name = "New Object";
-            int i = 1;
-            while (this->gamePointer->sceneMap.find(selectedObject.name) != this->gamePointer->sceneMap.end()) {
-                selectedObject.name = std::string("New Object " + std::to_string(i));
-                i++;
+            int count = 0;
+            for (auto object : this->gamePointer->sceneList) {
+                if (object->name == selectedObject->name) {
+                    count++;
+                }
             }
-            this->gamePointer->sceneMap.insert(std::pair<std::string, GameObject>(selectedObject.name, selectedObject));
+
+            this->gamePointer->sceneList.push_back(selectedObject);
+            
+
         }
 
         ImGui::EndPopup();
     }
 
-    objectEditWindow(selectedObject);
+    if (selectedObject != nullptr) {
+        objectEditWindow(selectedObject);
+    }
 
 
 
@@ -83,32 +117,46 @@ void EngineGUI::renderFrames() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void EngineGUI::objectEditWindow(GameObject &gameObject) {
-    ImGui::Begin("Object Editor");
+void EngineGUI::objectEditWindow(GameObject *gameObject) {
+    ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 300, 300), ImGuiCond_Once);
+    ImGui::Begin("Object Editor", reinterpret_cast<bool *>(true), ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
     ImGui::Text("This is the object editor window!");
     ImGui::Separator();
     ImGui::Text("Object Name:");  // Where users can edit the name of game objects
-    char nameBuffer[256];
-    std::strcpy(nameBuffer, gameObject.name.c_str());
-    if (ImGui::InputText("##ObjectName", nameBuffer, 64)) {
-        std::cout << "InputText changed the name to " << nameBuffer << std::endl;
-        gameObject.name = nameBuffer;
-        std::cout << "GameObject name is now " << gameObject.name << std::endl;
+    char buffer[256]; // Make sure the buffer is large enough
+    strcpy(buffer, gameObject->name.c_str());
+    if (ImGui::InputText("##Object Name", buffer, 256)) {gameObject->name = std::string(buffer);
+        std::cout << "Changed name to " << gameObject->name << std::endl;
     }
 
     ImGui::Separator();
     ImGui::Text("Texture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
-    ImGui::InputText("##TextureModel", gameObject.textureModel, 64);
+    char textureModelBuffer[64];
+    strcpy(textureModelBuffer, gameObject->textureModel.c_str());
+    if (ImGui::InputText("##Texture/Model", textureModelBuffer, 64)) {
+        gameObject->textureModel = std::string(textureModelBuffer);
+        std::cout << "Changed texture/model to " << gameObject->textureModel << std::endl;
+    }
     ImGui::Separator();
     // where users can change various transformation stuff
     ImGui::Text("Object Position:");
-    ImGui::DragFloat3("##Position xyz", &gameObject.position[0], 0.005f);
+    glm::vec3 position = gameObject->getPosition();
+    if (ImGui::DragFloat3("##Position xyz", glm::value_ptr(position), 0.005f)) {
+        gameObject->translate(position - gameObject->getPosition());
+    }
     ImGui::Separator();
     ImGui::Text("Object Rotation:");
-    ImGui::DragFloat3("##Rotation xyz", &gameObject.rotation[0], 0.05f);
+    glm::vec3 rotation = gameObject->getRotation();
+    if (ImGui::DragFloat3("##Rotation xyz", glm::value_ptr(rotation), 0.05f)) {
+        gameObject->rotateXYZ(rotation - gameObject->getRotation());
+    }
     ImGui::Separator();
     ImGui::Text("Object Scale:");
-    ImGui::DragFloat3("##Scale xyz", &gameObject.scale[0], 0.005f);
+    glm::vec3 scale = gameObject->getScale();
+    if (ImGui::DragFloat3("##Scale xyz", glm::value_ptr(scale), 0.005f)) {
+        gameObject->scale(scale);
+    }
     ImGui::Separator();
 
     ImGui::End();

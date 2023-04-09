@@ -14,13 +14,15 @@ class EngineGUI {
 public:
     Game* gamePointer;
 
-    GameObject selectedObject;
+    GameObject *selectedObject;
+
+    std::vector<Texture> iconAssets;
 
     EngineGUI(GLFWwindow* window, Game* game);
 
     void renderFrames();
 
-    static void objectEditWindow(GameObject &gameObject);
+    static void objectEditWindow(GameObject *gameObject);
 };
 
 

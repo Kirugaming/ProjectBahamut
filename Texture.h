@@ -13,18 +13,19 @@ class Texture{
 public:
 
     Texture();
-    explicit Texture(const char *imgSource);
 
 
-    const char *imgSource;
+    Texture(const std::string& imgSource);
+
+    std::string imgSource;
 
     unsigned int textureId{};
 
     void bindTexture() const;
     void unbindTexture() const;
 
-    void changeTexture(const char *imgSource);
 
+    void changeTexture(const std::string& filename);
 };
 
 
