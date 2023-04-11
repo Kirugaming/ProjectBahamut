@@ -5,7 +5,7 @@
 #include "ShaderLoader.h"
 
 // default constructor
-ShaderLoader::ShaderLoader() : ShaderLoader("shaders/shader.vert", "shaders/shader.frag") {}
+ShaderLoader::ShaderLoader() : ShaderLoader("Assets/shaders/shader.vert", "Assets/shaders/shader.frag") {}
 
 ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource) {
     // load shaders files

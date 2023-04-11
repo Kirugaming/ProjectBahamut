@@ -20,7 +20,8 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui::StyleColorsDark(); // some settings
 
     // Load Icon Assets into Memory
-    iconAssets.insert(iconAssets.end(), Texture("cube-solid.png"));
+    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/cube-solid.png"));
+    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/terrainIcon.png"));
 
 
 }
@@ -44,9 +45,7 @@ void EngineGUI::renderFrames() {
     ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
 
     ImGui::Begin("Game Object Editor", reinterpret_cast<bool *>(true), guiWindowFlags);
-    ImGui::Text("Game Object Editor\t\t");
-    ImGui::SameLine();
-    ImGui::Button("Map Editor");
+    ImGui::Text("Game Object Editor");
     ImGui::Separator();
     ImGui::Text("Game Objects:");
 
@@ -64,11 +63,16 @@ void EngineGUI::renderFrames() {
             }
         } else {
             // icon
-            auto iconTexuture = reinterpret_cast<ImTextureID>(iconAssets[0].textureId);
+            ImTextureID iconTexture;
+            if (object->getClass() == "Terrain") { // terrain object
+                iconTexture = reinterpret_cast<ImTextureID>(iconAssets[1].textureId);
+            } else { // game object
+                iconTexture = reinterpret_cast<ImTextureID>(iconAssets[0].textureId);
+            }
             ImGui::PushID("gameobject_icon");
 
             //                                                              | this part rotates horizontally
-            ImGui::Image(iconTexuture, ImVec2(20, 20), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image(iconTexture, ImVec2(20, 20), ImVec2(0, 1), ImVec2(1, 0));
             ImGui::SameLine();
             std::string nameBuffer = object->name;
             if (ImGui::Button(nameBuffer.c_str())) {
@@ -83,8 +87,7 @@ void EngineGUI::renderFrames() {
 
     // if right click on window then show popup
     if (ImGui::BeginPopupContextWindow()) {
-        if (ImGui::MenuItem("Add Object")) { // if clicked then run below
-            std::cout << "Add Object" << std::endl;
+        if (ImGui::MenuItem("Add GameObject")) { // if clicked then run below
             selectedObject = new GameObject();
             // add number to name if same name already exists in sceneMap
             int count = 0;
@@ -95,8 +98,18 @@ void EngineGUI::renderFrames() {
             }
 
             this->gamePointer->sceneList.push_back(selectedObject);
-            
+        }
+        if (ImGui::MenuItem("Add Terrain")) {
+            selectedObject = new Terrain();
+            // add number to name if same name already exists in sceneMap
+            int count = 0;
+            for (auto object : this->gamePointer->sceneList) {
+                if (object->name == selectedObject->name) {
+                    count++;
+                }
+            }
 
+            this->gamePointer->sceneList.push_back(selectedObject);
         }
 
         ImGui::EndPopup();

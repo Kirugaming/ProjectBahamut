@@ -94,3 +94,7 @@ glm::vec3 GameObject::getScale() {
     };
 }
 
+std::string GameObject::getClass() {
+    return "GameObject";
+}
+

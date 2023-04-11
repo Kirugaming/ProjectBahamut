@@ -10,7 +10,7 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
     // where i create the game objects that are displayed
     // these game objects are built-ins for debug purposes
 
-    GameObject* ground = new Terrain("ground", R"(grass.jpg)");
+    auto* ground = new Terrain("ground", R"(grass.jpg)");
 
     this->sceneList.push_back(ground);
 
