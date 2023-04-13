@@ -6,10 +6,10 @@ project("ProjectBahamut")
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 #set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/build/")
 
-
+set(CMAKE_CXX_STANDARD 17)
 set(SOURCE_FILES SpriteRenderer.cpp GameObject.cpp ShaderLoader.cpp window.cpp Texture.cpp )
 set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Mesh.h Mesh.cpp Model.cpp Model.h)
-set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Terrain.cpp Terrain.h)
+set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h Texture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Terrain.cpp Terrain.h Model.cpp Mesh.cpp)
 
 
 

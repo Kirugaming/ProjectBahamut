@@ -14,7 +14,7 @@ class EngineGUI {
 public:
     Game* gamePointer;
 
-    GameObject *selectedObject;
+    GameObject *selectedObject= nullptr;
 
     std::vector<Texture> iconAssets;
 

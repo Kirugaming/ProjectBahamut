@@ -14,7 +14,7 @@
 class Model {
     std::vector<MeshTexture> textures_loaded;
 public:
-    Model(char *path){
+    Model(std::string const path){
         loadModel(path);
     }
 

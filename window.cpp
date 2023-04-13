@@ -2,7 +2,7 @@
 // Created by S722778 on 9/12/2022.
 //
 #include "window.h"
-
+#include "Model.h"
 int main() {
     if (!glfwInit()) {
         std::cout << "GLFW failed to initialize!" << std::endl;
@@ -39,7 +39,9 @@ int main() {
     float lastFrame;
 
     glEnable(GL_DEPTH_TEST);
-
+    stbi_set_flip_vertically_on_load(true);
+    ShaderLoader shader;
+    Model model(R"(backpack/backpack.obj)");
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;

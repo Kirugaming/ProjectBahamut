@@ -14,7 +14,7 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
 
     this->sceneList.push_back(ground);
 
-    auto* player = new GameObject("player", R"(cat.png)", glm::mat4(1.0f));
+    auto* player = new GameObject("player", R"(stopstaring.png)", glm::mat4(1.0f));
 
     this->sceneList.push_back(player);
 

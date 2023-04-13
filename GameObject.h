@@ -15,7 +15,7 @@ public:
 
     GameObject();
 
-    GameObject(std::string name, const std::string &imgSource, glm::mat4 transform);
+    GameObject(std::string name, const std::string imgSource, glm::mat4 transform);
 
     SpriteRenderer sprite;
 

@@ -28,6 +28,7 @@ public:
     void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
 
     ShaderLoader &useShader();
+    void setInt(const std::string &name, int value) const;
 
 
 };

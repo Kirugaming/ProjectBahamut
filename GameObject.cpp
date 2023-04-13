@@ -6,7 +6,7 @@
 
 #include <utility>
 
-GameObject::GameObject(std::string name, const std::string& imgSource, glm::mat4 transform)
+GameObject::GameObject(std::string name, const std::string imgSource, glm::mat4 transform)
         : sprite(imgSource), transform(transform), name(std::move(name)), textureModel(imgSource) {
 
     // camera stuff
