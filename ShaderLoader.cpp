@@ -5,7 +5,7 @@
 #include "ShaderLoader.h"
 
 // default constructor
-ShaderLoader::ShaderLoader() : ShaderLoader("Assets/shaders/shader.vert", "Assets/shaders/shader.frag") {}
+ShaderLoader::ShaderLoader() : ShaderLoader("Assets/shaders/model_loading.vs", "Assets/shaders/model_loading.fs") {}
 
 ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource) {
     // load shaders files
@@ -94,6 +94,12 @@ void ShaderLoader::getShaderProgramLinkInfoLog(unsigned int shaderProgramID) {
     }
 }
 
+void ShaderLoader::setInt(const std::string &name, int value) const
+{
+    glUniform1i(glGetUniformLocation(this->shaderProgramID, name.c_str()), value);
+}
+
+
 void ShaderLoader::getShaderCompileInfoLog(unsigned int shaderID) {
     int success;
     char infoLog[512];
@@ -105,10 +111,6 @@ void ShaderLoader::getShaderCompileInfoLog(unsigned int shaderID) {
     }
 
 
+
 }
 // need to have more to edit the shaders
-void ShaderLoader::setInt(const std::string &name, int value) const
-{
-    glUniform1i(glGetUniformLocation(shaderProgramID, name.c_str()), value);
-}
-

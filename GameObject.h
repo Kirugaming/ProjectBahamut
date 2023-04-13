@@ -9,16 +9,19 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include "SpriteRenderer.h"
 #include "Texture.h"
+#include "Mesh.h"
+#include "Model.h"
 
 class GameObject {
 public:
 
     GameObject();
 
-    GameObject(std::string name, const std::string imgSource, glm::mat4 transform);
+    GameObject(std::string name, glm::mat4 transform, Model model);
 
-    SpriteRenderer sprite;
+    Model model;
 
+    ShaderLoader shaderLoader;
 
     glm::mat4 transform;
 

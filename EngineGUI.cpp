@@ -6,6 +6,7 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "EngineGUI.h"
+#include "Plane.h"
 #include <imgui.h>
 
 
@@ -20,7 +21,7 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui::StyleColorsDark(); // some settings
 
     // Load Icon Assets into Memory
-    iconAssets.insert(iconAssets.end(), Texture("cube-solid.png"));
+    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/cube-solid.png"));
 
 
 }
@@ -85,7 +86,7 @@ void EngineGUI::renderFrames() {
     if (ImGui::BeginPopupContextWindow()) {
         if (ImGui::MenuItem("Add Object")) { // if clicked then run below
             std::cout << "Add Object" << std::endl;
-            selectedObject = new GameObject();
+            //selectedObject = new Plane();
             // add number to name if same name already exists in sceneMap
             int count = 0;
             for (auto object : this->gamePointer->sceneList) {
@@ -105,7 +106,6 @@ void EngineGUI::renderFrames() {
     if (selectedObject != nullptr) {
         objectEditWindow(selectedObject);
     }
-
 
 
 

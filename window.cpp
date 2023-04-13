@@ -31,7 +31,7 @@ int main() {
 
     Game game; // to create the game objects for now
 
-    EngineGUI engineGui(window, &game);
+    //EngineGUI engineGui(window, &game);
 
     // for camera controls right now
     float deltaTime;
@@ -65,7 +65,7 @@ int main() {
 
 
         // draw engine ui
-        engineGui.renderFrames();
+        //engineGui.renderFrames();
 
 
 

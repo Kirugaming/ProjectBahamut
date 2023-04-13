@@ -5,20 +5,27 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Terrain.h"
+#include "Plane.h"
 
 Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -45.0f) {
     // where i create the game objects that are displayed
     // these game objects are built-ins for debug purposes
 
-    GameObject* ground = new Terrain("ground", R"(grass.jpg)");
+    /*
+    auto* ground = new Plane"ground", R"(grass.jpg)");
 
     this->sceneList.push_back(ground);
 
-    auto* player = new GameObject("player", R"(stopstaring.png)", glm::mat4(1.0f));
+    auto* player = new Plane(std::string(), nullptr, "player", R"(stopstaring.png)", glm::mat4(1.0f));
 
     this->sceneList.push_back(player);
 
+    */
+    auto* backpack=new GameObject("Backpack", glm::mat4(1.0f), *new Model(R"(backpack/backpack.obj)"));
 
+    backpack->translate(glm::vec3(0.0f));
+    backpack->scale(glm::vec3(1.0f));
+    this->sceneList.push_back(backpack);
 }
 
 void Game::drawScene() {
