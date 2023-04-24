@@ -21,11 +21,11 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
     this->sceneList.push_back(player);
 
     */
-    auto* backpack=new GameObject("Backpack", glm::mat4(1.0f), *new Model(R"(backpack/backpack.obj)"));
+    auto* portalGun=new GameObject("PortalGun", glm::mat4(1.0f), *new Model(R"(Assets/PortalGun/gun.obj)"));
 
-    backpack->translate(glm::vec3(0.0f));
-    backpack->scale(glm::vec3(1.0f));
-    this->sceneList.push_back(backpack);
+    portalGun->translate(glm::vec3(0.0f));
+    portalGun->scale(glm::vec3(1.0f));
+    this->sceneList.push_back(portalGun);
 }
 
 void Game::drawScene() {

@@ -31,7 +31,7 @@ int main() {
 
     Game game; // to create the game objects for now
 
-    //EngineGUI engineGui(window, &game);
+    EngineGUI engineGui(window, &game);
 
     // for camera controls right now
     float deltaTime;
@@ -41,7 +41,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     stbi_set_flip_vertically_on_load(true);
     ShaderLoader shader;
-    Model model(R"(backpack/backpack.obj)");
+    //Model model(R"(backpack/backpack.obj)");
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -57,7 +57,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-
         // draw all scene game objects
         game.drawScene();
 
@@ -65,7 +64,7 @@ int main() {
 
 
         // draw engine ui
-        //engineGui.renderFrames();
+        engineGui.renderFrames();
 
 
 

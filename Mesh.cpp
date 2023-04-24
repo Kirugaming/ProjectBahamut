@@ -4,10 +4,11 @@
 #include "Mesh.h"
 
 #include <utility>
-Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<MeshTexture>textures){
+Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<MeshTexture>textures,Colors colors){
     this->vertices=std::move(vertices);
     this->indices=std::move(indices);
     this->textures=std::move(textures);
+    this->colors=colors;
     setUpMesh();
 }
 
@@ -27,8 +28,10 @@ void Mesh::draw(ShaderLoader &shader) {
         shader.setInt(("material." + name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
-    glActiveTexture(GL_TEXTURE0);
 
+    glActiveTexture(GL_TEXTURE0);
+    glm::vec3 finalColor=colors.specular+colors.emissive+colors.ambient+colors.diffuse;
+    shader.editShaderWithVec3("colors",finalColor);
     // draw mesh
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

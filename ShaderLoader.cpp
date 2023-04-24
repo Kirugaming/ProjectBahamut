@@ -5,7 +5,7 @@
 #include "ShaderLoader.h"
 
 // default constructor
-ShaderLoader::ShaderLoader() : ShaderLoader("Assets/shaders/model_loading.vs", "Assets/shaders/model_loading.fs") {}
+ShaderLoader::ShaderLoader() : ShaderLoader("Assets\\shaders\\shader.vert", "Assets\\shaders\\shader.frag") {}
 
 ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource) {
     // load shaders files
@@ -83,7 +83,9 @@ ShaderLoader& ShaderLoader::useShader() {
 void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
-
+void ShaderLoader::editShaderWithVec3(const char *uniformName, glm::vec3 &colors) const {
+    glUniform3fv(glGetUniformLocation(this->shaderProgramID,uniformName),1,glm::value_ptr(colors));
+}
 void ShaderLoader::getShaderProgramLinkInfoLog(unsigned int shaderProgramID) {
     int success;
     char infoLog[512];

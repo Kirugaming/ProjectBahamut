@@ -34,6 +34,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<Vertex>vertices;
     std::vector<unsigned int> indices;
     std::vector<MeshTexture> textures;
+    Colors colors;
     for(unsigned int i=0;i<mesh->mNumVertices;i++){
         Vertex vertex;
         //copy vertices over
@@ -63,8 +64,22 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         textures.insert(textures.end(),diffuseMaps.begin(),diffuseMaps.end());
         std::vector<MeshTexture>specularMaps= loadMaterialTextures(mat,aiTextureType_SPECULAR,"texture_specular");
         textures.insert(textures.end(),specularMaps.begin(),specularMaps.end());
+        aiColor3D ambient;
+        mat->Get(AI_MATKEY_COLOR_AMBIENT,ambient);
+        colors.ambient=glm::vec3(ambient.r,ambient.g,ambient.b);
+        aiColor3D diffuse;
+        mat->Get(AI_MATKEY_COLOR_DIFFUSE,diffuse);
+        colors.diffuse=glm::vec3(diffuse.r,diffuse.g,diffuse.b);
+        aiColor3D emissive;
+        mat->Get(AI_MATKEY_COLOR_EMISSIVE,emissive);
+        colors.emissive=glm::vec3(emissive.r,emissive.g,emissive.b);
+        aiColor3D specular;
+        mat->Get(AI_MATKEY_COLOR_EMISSIVE,specular);
+        colors.emissive=glm::vec3(specular.r,specular.g,specular.b);
     }
-    return Mesh(vertices,indices,textures);
+
+
+    return {vertices,indices,textures,colors};
 }
 
 std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)

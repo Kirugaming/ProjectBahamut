@@ -45,7 +45,6 @@ void GameObject::draw() {
     }
      */
 
-
     this->shaderLoader.editShaderWithMat4("projection", const_cast<glm::mat4 &>(projectionRef));
     this->shaderLoader.editShaderWithMat4("view", const_cast<glm::mat4 &>(viewRef));
     this->shaderLoader.editShaderWithMat4("model", transform);

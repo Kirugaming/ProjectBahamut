@@ -26,7 +26,7 @@ public:
     static void getShaderCompileInfoLog(unsigned int shaderID) ;
 
     void editShaderWithMat4(const char* uniformName, glm::mat4 &matrix) const;
-
+    void editShaderWithVec3(const char* uniformName, glm:: vec3 &colors)const;
     ShaderLoader &useShader();
     void setInt(const std::string &name, int value) const;
 
