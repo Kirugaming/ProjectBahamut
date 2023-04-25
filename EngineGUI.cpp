@@ -6,7 +6,6 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "EngineGUI.h"
-#include "Plane.h"
 #include <imgui.h>
 
 
@@ -21,7 +20,7 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui::StyleColorsDark(); // some settings
 
     // Load Icon Assets into Memory
-    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/cube-solid.png"));
+    iconAssets.insert(iconAssets.end(), umTexture("Assets/icons/cube-solid.png"));
 
 
 }
@@ -131,10 +130,10 @@ void EngineGUI::objectEditWindow(GameObject *gameObject) {
     }
 
     ImGui::Separator();
-    ImGui::Text("Texture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
+    ImGui::Text("umTexture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
     char textureModelBuffer[64];
     strcpy(textureModelBuffer, gameObject->textureModel.c_str());
-    if (ImGui::InputText("##Texture/Model", textureModelBuffer, 64)) {
+    if (ImGui::InputText("##umTexture/Model", textureModelBuffer, 64)) {
         gameObject->textureModel = std::string(textureModelBuffer);
         std::cout << "Changed texture/model to " << gameObject->textureModel << std::endl;
     }

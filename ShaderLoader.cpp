@@ -5,7 +5,7 @@
 #include "ShaderLoader.h"
 
 // default constructor
-ShaderLoader::ShaderLoader() : ShaderLoader("Assets\\shaders\\shader.vert", "Assets\\shaders\\shader.frag") {}
+ShaderLoader::ShaderLoader() : ShaderLoader("Assets/shaders/shader.vert", "Assets/shaders/shader.frag") {}
 
 ShaderLoader::ShaderLoader(const std::string& vertexSource, const std::string& fragmentSource) {
     // load shaders files
@@ -78,6 +78,7 @@ ShaderLoader& ShaderLoader::useShader() {
     glUseProgram(this->shaderProgramID);
     return *this;
 }
+
 // a bunch of methods that allow dev to edit the shaders uniform variables
 
 void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {

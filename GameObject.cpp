@@ -28,9 +28,6 @@ GameObject::GameObject() : GameObject("default", "default.png", glm::mat4(1.0f))
 */
 
 void GameObject::draw() {
-    // Store projection and view matrices as const references to avoid accidental modification
-    const glm::mat4& projectionRef = this->projection;
-    const glm::mat4& viewRef = this->view;
 
 
 
@@ -40,17 +37,19 @@ void GameObject::draw() {
     // Check if texture model has changed before updating the sprite's texture
     /* TODO: this would be change model for a 3D Game Objects
     if (this->textureModel != this->sprite.texture->imgSource) {
-        std::cout << "Texture has changed\n";
+        std::cout << "umTexture has changed\n";
         this->sprite.texture->changeTexture(this->textureModel);
     }
      */
+    glUseProgram(shaderLoader.shaderProgramID);
 
-    this->shaderLoader.editShaderWithMat4("projection", const_cast<glm::mat4 &>(projectionRef));
-    this->shaderLoader.editShaderWithMat4("view", const_cast<glm::mat4 &>(viewRef));
+    this->shaderLoader.editShaderWithMat4("projection", this->projection);
+    this->shaderLoader.editShaderWithMat4("view", this->view);
     this->shaderLoader.editShaderWithMat4("model", transform);
 
     // Draw the sprite using the updated shader uniforms
     this->model.Draw(shaderLoader);
+    glUseProgram(0);
     //this->sprite.drawSprite();
 
 

@@ -2,20 +2,20 @@
 // Created by kirut on 9/12/2022.
 //
 
-#ifndef PROJECTBAHAMUT_TEXTURE_H
-#define PROJECTBAHAMUT_TEXTURE_H
+#ifndef PROJECTBAHAMUT_UMTEXTURE_H
+#define PROJECTBAHAMUT_UMTEXTURE_H
 
 #include <iostream>
 #include <stb_image.h>
 
 
-class Texture{
+class umTexture{
 public:
 
-    Texture();
+    umTexture();
 
 
-    Texture(const std::string& imgSource);
+    umTexture(const std::string& imgSource);
 
     std::string imgSource;
 
@@ -29,4 +29,4 @@ public:
 };
 
 
-#endif //PROJECTBAHAMUT_TEXTURE_H
+#endif //PROJECTBAHAMUT_UMTEXTURE_H

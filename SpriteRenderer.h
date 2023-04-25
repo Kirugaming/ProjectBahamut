@@ -7,7 +7,7 @@
 
 
 #include <glad/glad.h>
-#include "Texture.h"
+#include "umTexture.h"
 #include "ShaderLoader.h"
 #include <GLFW/glfw3.h>
 #include <string>
@@ -23,7 +23,7 @@ public:
 
     explicit SpriteRenderer(const std::string& imgSource);
 
-    Texture *texture;
+    umTexture *texture;
 
     ShaderLoader shaderLoader;
     unsigned int vertexBuffer{}, vertexArray{}, elementBuffer{};

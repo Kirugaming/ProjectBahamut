@@ -41,7 +41,6 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     stbi_set_flip_vertically_on_load(true);
     ShaderLoader shader;
-    //Model model(R"(backpack/backpack.obj)");
     while(!glfwWindowShouldClose(window)) {
         currentFrame = (float) glfwGetTime();
         deltaTime = currentFrame - lastFrame;

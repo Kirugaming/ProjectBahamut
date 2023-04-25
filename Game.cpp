@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Terrain.h"
-#include "Plane.h"
 
 Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -45.0f) {
     // where i create the game objects that are displayed
@@ -21,7 +20,7 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
     this->sceneList.push_back(player);
 
     */
-    auto* portalGun=new GameObject("PortalGun", glm::mat4(1.0f), *new Model(R"(Assets/PortalGun/gun.obj)"));
+    auto* portalGun=new GameObject("PortalGun", glm::mat4(1.0f), *new Model(R"(portal/gun.obj)"));
 
     portalGun->translate(glm::vec3(0.0f));
     portalGun->scale(glm::vec3(1.0f));

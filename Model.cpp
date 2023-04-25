@@ -33,7 +33,7 @@ void Model::processNode(aiNode *node, const aiScene *scene) {
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<Vertex>vertices;
     std::vector<unsigned int> indices;
-    std::vector<MeshTexture> textures;
+    std::vector<Texture> textures;
     Colors colors;
     for(unsigned int i=0;i<mesh->mNumVertices;i++){
         Vertex vertex;
@@ -60,31 +60,36 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     }
     if(mesh->mMaterialIndex>=0){
         aiMaterial *mat=scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<MeshTexture>diffuseMaps= loadMaterialTextures(mat,aiTextureType_DIFFUSE,"texture_diffuse");
+        std::vector<Texture>diffuseMaps= loadMaterialTextures(mat,aiTextureType_DIFFUSE,"texture_diffuse");
         textures.insert(textures.end(),diffuseMaps.begin(),diffuseMaps.end());
-        std::vector<MeshTexture>specularMaps= loadMaterialTextures(mat,aiTextureType_SPECULAR,"texture_specular");
+        std::vector<Texture>specularMaps= loadMaterialTextures(mat,aiTextureType_SPECULAR,"texture_specular");
         textures.insert(textures.end(),specularMaps.begin(),specularMaps.end());
+
         aiColor3D ambient;
         mat->Get(AI_MATKEY_COLOR_AMBIENT,ambient);
         colors.ambient=glm::vec3(ambient.r,ambient.g,ambient.b);
+        std::cout << "ambient: " << colors.ambient.r << " " << colors.ambient.g << " " << colors.ambient.b << std::endl;
         aiColor3D diffuse;
         mat->Get(AI_MATKEY_COLOR_DIFFUSE,diffuse);
         colors.diffuse=glm::vec3(diffuse.r,diffuse.g,diffuse.b);
+        std::cout << "diffuse: " << colors.diffuse.r << " " << colors.diffuse.g << " " << colors.diffuse.b << std::endl;
         aiColor3D emissive;
         mat->Get(AI_MATKEY_COLOR_EMISSIVE,emissive);
         colors.emissive=glm::vec3(emissive.r,emissive.g,emissive.b);
+        std::cout << "emissive: " << colors.emissive.r << " " << colors.emissive.g << " " << colors.emissive.b << std::endl;
         aiColor3D specular;
-        mat->Get(AI_MATKEY_COLOR_EMISSIVE,specular);
+        mat->Get(AI_MATKEY_COLOR_SPECULAR,specular);
         colors.emissive=glm::vec3(specular.r,specular.g,specular.b);
+        std::cout << "specular: " << colors.specular.r << " " << colors.specular.g << " " << colors.specular.b << std::endl;
     }
 
 
     return {vertices,indices,textures,colors};
 }
 
-std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
-    std::vector<MeshTexture> textures;
+    std::vector<Texture> textures;
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
@@ -101,7 +106,7 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
         }
         if(!skip)
         {   // if texture hasn't been loaded already, load it
-            MeshTexture texture;
+            Texture texture;
             texture.id = TextureFromFile(str.C_Str(), directory);
             texture.type = typeName;
             texture.path = str.C_Str();

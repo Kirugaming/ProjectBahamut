@@ -12,7 +12,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 class Model {
-    std::vector<MeshTexture> textures_loaded;
+    std::vector<Texture> textures_loaded;
 public:
     Model(std::string const path){
         loadModel(path);
@@ -27,7 +27,7 @@ private:
     unsigned int TextureFromFile(const char* str,const std::string directory);
     void processNode(aiNode *node,const aiScene *aiScene);
     Mesh processMesh(aiMesh *mesh,const aiScene *aiScene);
-    std::vector<MeshTexture>loadMaterialTextures(aiMaterial *mat,aiTextureType type,std::string typeName);
+    std::vector<Texture>loadMaterialTextures(aiMaterial *mat,aiTextureType type,std::string typeName);
 };
 
 

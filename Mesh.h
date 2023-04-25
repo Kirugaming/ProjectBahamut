@@ -19,13 +19,14 @@ struct Vertex{
     //weights from each bone
     float m_Weights[4];
 };
+
 struct Colors{
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;
     glm::vec3 emissive;
 };
-struct MeshTexture{
+struct Texture{
     unsigned int id;
     std::string type;
     std::string path;
@@ -34,9 +35,10 @@ class Mesh{
 public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<MeshTexture> textures;
+    std::vector<Texture> textures;
+    Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<Texture>textures);
     Colors colors;
-    Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<MeshTexture>textures,Colors colors);
+    Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<Texture>textures,Colors colors);
     void draw(ShaderLoader &shader );
 private:
     unsigned int VBO,VAO,EBO;

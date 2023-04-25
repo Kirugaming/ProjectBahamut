@@ -4,7 +4,7 @@
 #include "Mesh.h"
 
 #include <utility>
-Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<MeshTexture>textures,Colors colors){
+Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vector<Texture>textures,Colors colors){
     this->vertices=std::move(vertices);
     this->indices=std::move(indices);
     this->textures=std::move(textures);
@@ -13,6 +13,8 @@ Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vec
 }
 
 void Mesh::draw(ShaderLoader &shader) {
+
+
     unsigned int dcount = 1;
     unsigned int scount = 1;
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -25,17 +27,24 @@ void Mesh::draw(ShaderLoader &shader) {
         else if(name == "texture_specular")
             number = std::to_string(scount++);
 
-        shader.setInt(("material." + name + number).c_str(), i);
+        shader.setInt((name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
 
     glActiveTexture(GL_TEXTURE0);
-    glm::vec3 finalColor=colors.specular+colors.emissive+colors.ambient+colors.diffuse;
-    shader.editShaderWithVec3("colors",finalColor);
+
+    glm::vec3 finalColor = colors.ambient + colors.diffuse + colors.specular + colors.emissive;
+
+    shader.editShaderWithVec3("ambient",colors.ambient);
+    shader.editShaderWithVec3("diffuse",colors.diffuse);
+    shader.editShaderWithVec3("specular",colors.specular);
+    shader.editShaderWithVec3("emissive",colors.emissive);
+
     // draw mesh
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
 }
 
 void Mesh::setUpMesh() {
@@ -55,19 +64,6 @@ void Mesh::setUpMesh() {
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Coords));
-    // vertex tangent
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
-    // vertex bitangent
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
-    // ids
-    glEnableVertexAttribArray(5);
-    glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
-    // weights
-    glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
-    glBindVertexArray(0);
 }
 
 
