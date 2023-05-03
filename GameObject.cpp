@@ -49,9 +49,8 @@ void GameObject::draw() {
 
     // Draw the sprite using the updated shader uniforms
     this->model.Draw(shaderLoader);
-    glUseProgram(0);
     //this->sprite.drawSprite();
-
+    glUseProgram(0);
 
 }
 

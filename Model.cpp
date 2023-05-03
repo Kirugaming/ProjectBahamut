@@ -5,13 +5,13 @@
 #include "Model.h"
 #include "stb_image.h"
 void Model::Draw(ShaderLoader shader) {
-    for(unsigned int i=0;i<meshes.size();i++){
-        meshes[i].draw(shader);
+    for(auto & mesh : meshes){
+        mesh.draw(shader);
     }
 }
 void Model::loadModel(std::string path) {
     Assimp::Importer importer;
-    const aiScene *scene =importer.ReadFile(path,aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene *scene =importer.ReadFile(path,aiProcess_FlipUVs  |aiProcess_GenSmoothNormals |aiProcess_CalcTangentSpace |aiProcess_Triangulate |aiProcess_JoinIdenticalVertices |aiProcess_SortByPType);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
         std::cout << "IMPORT ERROR " << importer.GetErrorString()<<std::endl;
         return;
@@ -45,6 +45,10 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         //copy textures, if any otherwise default to 0's
         if(mesh->mTextureCoords[0]){
             vertex.Coords=glm::vec2(mesh->mTextureCoords[0][i].x,mesh->mTextureCoords[0][i].y);
+            //copy tangents
+            vertex.Tangent=glm::vec3(mesh->mTangents[i].x,mesh->mTangents[i].y,mesh->mTangents[i].z);
+            //copy bitangents
+            vertex.Bitangent=glm::vec3(mesh->mBitangents[i].x,mesh->mBitangents[i].y,mesh->mBitangents[i].z);
 
         }
         else{

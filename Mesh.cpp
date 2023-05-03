@@ -13,8 +13,6 @@ Mesh::Mesh(std::vector<Vertex>vertices,std::vector<unsigned int>indices,std::vec
 }
 
 void Mesh::draw(ShaderLoader &shader) {
-
-
     unsigned int dcount = 1;
     unsigned int scount = 1;
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -29,9 +27,10 @@ void Mesh::draw(ShaderLoader &shader) {
 
         shader.setInt((name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
+        glActiveTexture(GL_TEXTURE0+i);
     }
 
-    glActiveTexture(GL_TEXTURE0);
+
 
     glm::vec3 finalColor = colors.ambient + colors.diffuse + colors.specular + colors.emissive;
 
@@ -57,13 +56,27 @@ void Mesh::setUpMesh() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(unsigned int),&indices[0],GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)nullptr);
     // vertex normals
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Coords));
+// vertex tangent
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+// vertex bitangent
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+    // bone ids
+    glEnableVertexAttribArray(5);
+    glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+    // bone weights
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+
+    glBindVertexArray(0);
 }
 
 

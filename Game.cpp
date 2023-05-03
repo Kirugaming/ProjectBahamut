@@ -15,16 +15,14 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
 
     this->sceneList.push_back(ground);
 
-    auto* player = new Plane(std::string(), nullptr, "player", R"(stopstaring.png)", glm::mat4(1.0f));
+
 
     this->sceneList.push_back(player);
 
     */
-    auto* portalGun=new GameObject("PortalGun", glm::mat4(1.0f), *new Model(R"(portal/gun.obj)"));
+    auto* backpack = new GameObject("Raphtalia", glm::mat4(1.0f), Model("raph/raph.obj"));
+    this->sceneList.push_back(backpack);
 
-    portalGun->translate(glm::vec3(0.0f));
-    portalGun->scale(glm::vec3(1.0f));
-    this->sceneList.push_back(portalGun);
 }
 
 void Game::drawScene() {
