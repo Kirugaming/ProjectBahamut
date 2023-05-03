@@ -3,12 +3,12 @@
 //
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "Texture.h"
+#include "umTexture.h"
 #include <glad/glad.h>
 
-Texture::Texture() : Texture("default.png") {
+umTexture::umTexture() : umTexture("default.png") {
 }
-Texture::Texture(const std::string& imgSource) : imgSource(imgSource) {
+umTexture::umTexture(const std::string& imgSource) : imgSource(imgSource) {
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     // wrapping
@@ -39,16 +39,16 @@ Texture::Texture(const std::string& imgSource) : imgSource(imgSource) {
     std::cout << "Image Loaded" << std::endl;
 }
 
-void Texture::bindTexture() const {
+void umTexture::bindTexture() const {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->textureId);
 }
 
-void Texture::unbindTexture() const {
+void umTexture::unbindTexture() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::changeTexture(const std::string& filename) {
+void umTexture::changeTexture(const std::string& filename) {
     int width, height, nrChannels;
     // load image into program
     unsigned char* img = stbi_load(filename.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);

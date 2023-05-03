@@ -6,50 +6,51 @@
 
 #include <utility>
 
-GameObject::GameObject(std::string name, const std::string& imgSource, glm::mat4 transform)
-        : sprite(imgSource), transform(transform), name(std::move(name)), textureModel(imgSource) {
+GameObject::GameObject(std::string name, glm::mat4 transform, Model model)
+        : shaderLoader(), transform(transform), name(std::move(name)), textureModel("default.png") ,model(std::move(model)) {
 
     // camera stuff
     this->view = glm::translate(this->view, glm::vec3(0.0f, 0.0f, -3.0f));
     this->projection = glm::perspective(glm::radians(45.0f), (float)640 / (float)480, 0.1f, 100.0f);
 
     // add how an object is viewed to the shaders
-    this->sprite.shaderLoader.editShaderWithMat4("projection", this->projection);
-    this->sprite.shaderLoader.editShaderWithMat4("view", this->view);
+    this->shaderLoader.editShaderWithMat4("projection", this->projection);
+    this->shaderLoader.editShaderWithMat4("view", this->view);
 
 
 
 
 }
 // default constructor
+/*
 GameObject::GameObject() : GameObject("default", "default.png", glm::mat4(1.0f)) {
 }
-
+*/
 
 void GameObject::draw() {
-    // Store projection and view matrices as const references to avoid accidental modification
-    const glm::mat4& projectionRef = this->projection;
-    const glm::mat4& viewRef = this->view;
 
-    this->sprite.texture->bindTexture();
-    this->sprite.shaderLoader.useShader();
+
 
 
 
 
     // Check if texture model has changed before updating the sprite's texture
+    /* TODO: this would be change model for a 3D Game Objects
     if (this->textureModel != this->sprite.texture->imgSource) {
-        std::cout << "Texture has changed\n";
+        std::cout << "umTexture has changed\n";
         this->sprite.texture->changeTexture(this->textureModel);
     }
+     */
+    glUseProgram(shaderLoader.shaderProgramID);
 
-    this->sprite.shaderLoader.editShaderWithMat4("model", transform);
-    this->sprite.shaderLoader.editShaderWithMat4("projection", const_cast<glm::mat4 &>(projectionRef));
-    this->sprite.shaderLoader.editShaderWithMat4("view", const_cast<glm::mat4 &>(viewRef));
+    this->shaderLoader.editShaderWithMat4("projection", this->projection);
+    this->shaderLoader.editShaderWithMat4("view", this->view);
+    this->shaderLoader.editShaderWithMat4("model", transform);
 
     // Draw the sprite using the updated shader uniforms
-    this->sprite.drawSprite();
-
+    this->model.Draw(shaderLoader);
+    //this->sprite.drawSprite();
+    glUseProgram(0);
 
 }
 

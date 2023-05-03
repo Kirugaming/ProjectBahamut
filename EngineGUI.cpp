@@ -121,7 +121,6 @@ void EngineGUI::renderFrames() {
 
 
 
-
     ImGui::End();
 
 
@@ -144,10 +143,10 @@ void EngineGUI::objectEditWindow(GameObject *gameObject) {
     }
 
     ImGui::Separator();
-    ImGui::Text("Texture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
+    ImGui::Text("umTexture/Model:"); // where users can change the model (texture as of now since the engine only renders 3d planes)
     char textureModelBuffer[64];
     strcpy(textureModelBuffer, gameObject->textureModel.c_str());
-    if (ImGui::InputText("##Texture/Model", textureModelBuffer, 64)) {
+    if (ImGui::InputText("##umTexture/Model", textureModelBuffer, 64)) {
         gameObject->textureModel = std::string(textureModelBuffer);
         std::cout << "Changed texture/model to " << gameObject->textureModel << std::endl;
     }

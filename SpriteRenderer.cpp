@@ -13,9 +13,9 @@ void SpriteRenderer::drawSprite() const {
     glBindVertexArray(0);
 }
 
-SpriteRenderer::SpriteRenderer(const std::string& imgSource, ShaderLoader sl) : shaderLoader(sl), texture(new Texture(imgSource)) {
+SpriteRenderer::SpriteRenderer(const std::string& imgSource, ShaderLoader sl) : shaderLoader(sl), texture(new umTexture(imgSource)) {
     float vertices[] = {
-            // positions (x,y,z)                // Texture coords (x,y)
+            // positions (x,y,z)                // umTexture coords (x,y)
             -1.0f,  -1.0f, 0.0f,    0.0f, 0.0f, // top right
             -1.0f, 1.0f, 0.0f,      0.0f, 1.0f, // bottom right
             1.0f, 1.0f, 0.0f,     1.0f, 1.0f, // bottom left

@@ -10,14 +10,9 @@ Game::Game() : camera(glm::vec3(0.0f, 1.5f, 2.0f), glm::vec3(0.0f, 1.0f, 0.0f), 
     // where i create the game objects that are displayed
     // these game objects are built-ins for debug purposes
 
-    auto* ground = new Terrain("ground", R"(grass.jpg)");
-
-    this->sceneList.push_back(ground);
-
-    auto* player = new GameObject("player", R"(cat.png)", glm::mat4(1.0f));
-
-    this->sceneList.push_back(player);
-
+    */
+    auto* backpack = new GameObject("Raphtalia", glm::mat4(1.0f), Model("raph/raph.obj"));
+    this->sceneList.push_back(backpack);
 
 }
 

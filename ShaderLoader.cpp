@@ -78,12 +78,15 @@ ShaderLoader& ShaderLoader::useShader() {
     glUseProgram(this->shaderProgramID);
     return *this;
 }
+
 // a bunch of methods that allow dev to edit the shaders uniform variables
 
 void ShaderLoader::editShaderWithMat4(const char *uniformName, glm::mat4 &matrix) const {
     glUniformMatrix4fv(glGetUniformLocation(this->shaderProgramID, uniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 }
-
+void ShaderLoader::editShaderWithVec3(const char *uniformName, glm::vec3 &colors) const {
+    glUniform3fv(glGetUniformLocation(this->shaderProgramID,uniformName),1,glm::value_ptr(colors));
+}
 void ShaderLoader::getShaderProgramLinkInfoLog(unsigned int shaderProgramID) {
     int success;
     char infoLog[512];
@@ -93,6 +96,12 @@ void ShaderLoader::getShaderProgramLinkInfoLog(unsigned int shaderProgramID) {
         std::cout << "Shader program failed to link! - " << infoLog << std::endl;
     }
 }
+
+void ShaderLoader::setInt(const std::string &name, int value) const
+{
+    glUniform1i(glGetUniformLocation(this->shaderProgramID, name.c_str()), value);
+}
+
 
 void ShaderLoader::getShaderCompileInfoLog(unsigned int shaderID) {
     int success;
@@ -104,7 +113,7 @@ void ShaderLoader::getShaderCompileInfoLog(unsigned int shaderID) {
         std::cout << "Shader failed to compile! - " << infoLog << std::endl;
     }
 
+
+
 }
 // need to have more to edit the shaders
-
-
