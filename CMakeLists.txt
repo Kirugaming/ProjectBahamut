@@ -13,7 +13,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archi
 set(CMAKE_CXX_STANDARD 17)
 set(SOURCE_FILES SpriteRenderer.cpp GameObject.cpp ShaderLoader.cpp window.cpp umTexture.cpp)
 set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h umTexture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Mesh.h Mesh.cpp Model.cpp Model.h)
-set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h umTexture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Model.cpp Mesh.cpp)
+set(HEADER_FILES SpriteRenderer.h GameObject.h ShaderLoader.h umTexture.h window.h camera.h Game.cpp Game.h EngineGUI.cpp EngineGUI.h Model.cpp Mesh.cpp Transformation.h Transformation.cpp)
 
 
 

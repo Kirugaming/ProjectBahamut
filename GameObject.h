@@ -11,6 +11,7 @@
 #include "umTexture.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "Transformation.h"
 
 class GameObject {
 public:
@@ -19,18 +20,15 @@ public:
 
     GameObject(std::string name, glm::mat4 transform, Model model);
 
-    Model model;
+    GameObject(std::string name, Model model);
 
     ShaderLoader shaderLoader;
-
-    glm::mat4 transform;
-
-
+    std::string name;
+    Model model;
+    Transform transform;
     glm::vec3 skew;
 
-    std::string name;
-
-    std::string textureModel;
+    std::string textureModel; // TODO: to be deleted
 
     glm::vec4 perspective;
     glm::mat4 projection = glm::mat4(1.0f);
@@ -42,20 +40,18 @@ public:
 
 
 
-    void rotate(float angle, glm::vec3 axis);
     void translate(const glm::vec3 &offset);
     void scale(const glm::vec3 &scale);
 
-    glm::vec3 getPosition();
+
 
     void draw();
 
+    glm::vec3 getPosition() const;
+    glm::quat getRotation() const;
+    glm::vec3 getScale() const;
 
-    glm::vec3 getRotation() const;
-
-    glm::vec3 getScale();
-
-    void rotateXYZ(glm::vec3 eulerAngles);
+    void rotate(glm::vec3 angles);
 };
 
 

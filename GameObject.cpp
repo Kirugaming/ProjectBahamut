@@ -6,8 +6,10 @@
 
 #include <utility>
 
-GameObject::GameObject(std::string name, glm::mat4 transform, Model model)
-        : shaderLoader(), transform(transform), name(std::move(name)), textureModel("default.png") ,model(std::move(model)) {
+GameObject::GameObject(std::string name, Model model)
+        : shaderLoader(), name(std::move(name)), textureModel("default.png") ,model(std::move(model)) {
+
+    transform = Transform();
 
     // camera stuff
     this->view = glm::translate(this->view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -22,10 +24,8 @@ GameObject::GameObject(std::string name, glm::mat4 transform, Model model)
 
 }
 // default constructor
-/*
-GameObject::GameObject() : GameObject("default", "default.png", glm::mat4(1.0f)) {
+GameObject::GameObject() : GameObject("default", Model("default.obj")) {
 }
-*/
 
 void GameObject::draw() {
 
@@ -45,7 +45,10 @@ void GameObject::draw() {
 
     this->shaderLoader.editShaderWithMat4("projection", this->projection);
     this->shaderLoader.editShaderWithMat4("view", this->view);
-    this->shaderLoader.editShaderWithMat4("model", transform);
+
+    glm::mat4 transformMat4 = Transform::transformToMat4(this->transform);
+
+    this->shaderLoader.editShaderWithMat4("model", transformMat4);
 
     // Draw the sprite using the updated shader uniforms
     this->model.Draw(shaderLoader);
@@ -55,44 +58,26 @@ void GameObject::draw() {
 }
 
 void GameObject::translate(const glm::vec3 &offset) {
-    transform = glm::translate(transform, offset);
+    transform.position += offset;
 }
 
-void GameObject::rotate(float angle, glm::vec3 axis) {
-    transform = glm::rotate(transform, glm::radians(angle), axis);
+void GameObject::rotate(glm::vec3 angles) {
+    transform.rotation *= glm::quat(glm::radians(angles));
 }
-
-void GameObject::rotateXYZ(glm::vec3 eulerAngles) {
-    glm::mat4 rotationMatrix(1.0f);
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.x), glm::vec3(1, 0, 0));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.y), glm::vec3(0, 1, 0));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(eulerAngles.z), glm::vec3(0, 0, 1));
-    transform = transform * rotationMatrix;
-}
-
 void GameObject::scale(const glm::vec3 &scale) {
-    // it is possible to divide by zero (BAD) so uh dont do that
-    if (scale.x == 0.0f || scale.y == 0.0f || scale.z == 0.0f) {
-        std::cerr << "Scale vector cannot contain 0 values." << std::endl;
-        return; // need better way of doing this
-    }
-    transform = glm::scale(transform, scale / getScale());
+    transform.scale *= scale;
 }
 
-glm::vec3 GameObject::getPosition() {
-    return {transform[3][0], transform[3][1], transform[3][2]};
+glm::vec3 GameObject::getPosition() const {
+    return transform.position;
 }
 
-glm::vec3 GameObject::getRotation() const {
-    return glm::eulerAngles(glm::quat_cast(transform));
+glm::quat GameObject::getRotation() const {
+    return transform.rotation;
 }
 
-glm::vec3 GameObject::getScale() {
-    return {
-            glm::length(glm::vec3(transform[0][0], transform[0][1], transform[0][2])),
-            glm::length(glm::vec3(transform[1][0], transform[1][1], transform[1][2])),
-            glm::length(glm::vec3(transform[2][0], transform[2][1], transform[2][2]))
-    };
+glm::vec3 GameObject::getScale() const {
+    return transform.scale;
 }
 
 std::string GameObject::getClass() {

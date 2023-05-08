@@ -20,8 +20,8 @@ EngineGUI::EngineGUI(GLFWwindow* window, Game* game) : gamePointer(game) {
     ImGui::StyleColorsDark(); // some settings
 
     // Load Icon Assets into Memory
-    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/cube-solid.png"));
-    iconAssets.insert(iconAssets.end(), Texture("Assets/icons/terrainIcon.png"));
+    iconAssets.insert(iconAssets.end(), umTexture("Assets/icons/cube-solid.png"));
+    iconAssets.insert(iconAssets.end(), umTexture("Assets/icons/terrainIcon.png"));
 
 
 }
@@ -99,18 +99,6 @@ void EngineGUI::renderFrames() {
 
             this->gamePointer->sceneList.push_back(selectedObject);
         }
-        if (ImGui::MenuItem("Add Terrain")) {
-            selectedObject = new Terrain();
-            // add number to name if same name already exists in sceneMap
-            int count = 0;
-            for (auto object : this->gamePointer->sceneList) {
-                if (object->name == selectedObject->name) {
-                    count++;
-                }
-            }
-
-            this->gamePointer->sceneList.push_back(selectedObject);
-        }
 
         ImGui::EndPopup();
     }
@@ -159,15 +147,15 @@ void EngineGUI::objectEditWindow(GameObject *gameObject) {
     }
     ImGui::Separator();
     ImGui::Text("Object Rotation:");
-    glm::vec3 rotation = gameObject->getRotation();
-    if (ImGui::DragFloat3("##Rotation xyz", glm::value_ptr(rotation), 0.05f)) {
-        gameObject->rotateXYZ(rotation - gameObject->getRotation());
+    glm::vec3 rotation = glm::eulerAngles(gameObject->getRotation());
+    if (ImGui::DragFloat3("##Rotation xyz", glm::value_ptr(rotation), 0.005f)) {
+        gameObject->rotate(rotation - glm::eulerAngles(gameObject->getRotation()));
     }
     ImGui::Separator();
     ImGui::Text("Object Scale:");
     glm::vec3 scale = gameObject->getScale();
     if (ImGui::DragFloat3("##Scale xyz", glm::value_ptr(scale), 0.005f)) {
-        gameObject->scale(scale);
+        gameObject->scale(scale / gameObject->getScale());
     }
     ImGui::Separator();
 
